@@ -1,0 +1,745 @@
+#include <iostream>
+#include "Matrix.hpp"
+#include <cassert>
+#include <stdlib.h>
+// constructor that creates matrix of given size with
+// double precision entries all initially set to zero
+Matrix::Matrix(int rows, int cols)
+{
+  mData=new double* [rows];
+  mShape[0] = rows;
+  mShape[1] = cols;
+	for (int i=0; i<rows;  i++){
+		mData[i] = new double[cols];
+		for (int j=0; j<cols; j++){
+			mData[i][j] = 0.0;
+		}
+	}
+}
+
+
+// destructor - deletes pointer
+Matrix::~Matrix()
+{
+  delete[] mData;
+}
+
+double& Matrix::operator()(int i, int j)
+{
+
+  if (i < 1 || j< 1)
+    {
+      throw Exception("out of range",
+		  "accessing vector through () - index too small");
+    }
+  else if (i > mShape[0] || j >mShape[1] )
+    {
+      throw Exception("length mismatch",
+		  "accessing vector through () - index too high");
+    }
+  return mData[i-1][j-1];
+}
+
+Matrix Matrix::T() const
+{
+	Matrix C(mShape[1],mShape[0]);
+	for (int i=0; i<mShape[1];  i++){
+		for (int j=0; j<mShape[0]; j++){
+			C.mData[i][j] = mData[j][i];
+		}
+	}
+	return C;
+}
+int nrows(const Matrix& C)
+{
+	return C.mShape[0];
+}
+
+int ncols(const Matrix& C)
+{
+	return C.mShape[1];
+}
+
+
+Matrix operator+(const Matrix& A, const Matrix& B)
+{
+	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
+	Matrix W(A.mShape[0], A.mShape[1]);
+  	W.mData=new double* [W.mShape[0]];
+  	for (int i=0; i<W.mShape[0];  i++){
+  		W.mData[i] = new double[W.mShape[1]];
+  		for (int j=0; j<W.mShape[1]; j++){
+  			W.mData[i][j] = A.mData[i][j]+ B.mData[i][j];
+  		}
+  	}
+  return W;
+}
+
+
+Matrix operator-(const Matrix& A, const Matrix& B)
+{
+	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
+	Matrix W(A.mShape[0], A.mShape[1]);
+  	W.mData=new double* [W.mShape[0]];
+  	for (int i=0; i<W.mShape[0];  i++){
+  		W.mData[i] = new double[W.mShape[1]];
+  		for (int j=0; j<W.mShape[1]; j++){
+  			W.mData[i][j] = A.mData[i][j]- B.mData[i][j];
+  		}
+  	}
+  return W;
+}
+
+Vector Matrix::get_col(int k)
+{
+	//std::cout<<"before all"<<std::endl<< std::flush;
+	Vector v(mShape[0]);
+//	std::cout<<"after vec"<<std::endl<< std::flush;
+	for (int i =1 ; i<=mShape[0]; i++){
+		//std::cout<<"pre-definition"<<std::endl<< std::flush;
+		//std::cout<< "this is the val  "<< mData[i][k]<< "this is the size  "<<mShape[0] << std::endl<< std::flush;
+		v.set_val(i, mData[i-1][k-1]);
+		//std::cout<<"in for loop"<<std::endl<< std::flush;
+	}
+	//std::cout<<"before return"<<std::endl<< std::flush;
+	return v;
+}
+
+Vector Matrix::get_row(int k)
+{
+	Vector v(mShape[0]);
+	for (int i =1 ; i<=mShape[1]; i++){
+		v.set_val(i, mData[k-1][i-1]);
+	}
+	return v;
+}
+
+// definition of vector operator =
+Matrix& Matrix::operator=(const Matrix& A)
+{
+
+
+  if (A.mShape[0] != mShape[0] || A.mShape[1] != mShape[1])
+    {
+      throw Exception("size mismatch",
+		  "matrix assignment operator - matrices have different lengths");
+    }
+  else
+    {
+	  for (int i=0; i<mShape[0];  i++){
+	  		mData[i] = new double[mShape[1]];
+	  		for (int j=0; j<mShape[1]; j++){
+	  			mData[i][j] = A.mData[i][j];
+	  		}
+	  }
+    }
+  return *this;
+}
+
+
+Matrix operator-(const Matrix& C)
+{
+	Matrix W(C.mShape[0],C.mShape[1]);
+	W.mData=new double* [W.mShape[0]];
+	for (int i=0; i<W.mShape[0];  i++){
+		W.mData[i] = new double[W.mShape[1]];
+		for (int j=0; j<W.mShape[1]; j++){
+			W.mData[i][j] = -C.mData[i][j];
+		}
+	}
+	return W;
+}
+/*
+double s_prod(Vector& a, Vector& b,int length){
+	double c=0.0;
+	for(int i=0; i<length ; i++){
+		c+= a(i)*b(i);
+	}
+	return c;
+}
+*/
+Matrix operator*(Matrix& A, Matrix& B){
+	assert(A.mShape[1] == B.mShape[0]);
+	Matrix C(A.mShape[0],B.mShape[1]);
+	//std::cout<<C<<std::endl;
+	for (int i=0; i<A.mShape[0];  i++){
+		for (int j=0; j<B.mShape[1]; j++){
+		//	C.mData[i][j] = s_prod(A.get_col(i+1), B.T().get_col(j+1), A.mShape[0]);
+			C.set_val(i+1,j+1 , (A.T().get_col(i+1) * B.get_col(j+1)));
+		}
+	}
+	return C;
+}
+
+Vector operator*(Matrix& A, Vector& b){
+	assert(nrows(A) == length(b));
+	int k= length(b);
+	Vector v(k);
+	for (int i=1; i<=k;  i++){
+		v.set_val(i, A.get_row(i)*b);
+
+	}
+	return v;
+}
+
+Matrix operator*(const Matrix& A, const double& a)
+{
+	Matrix C(A.mShape[0],A.mShape[1]);
+	for (int i=0; i<A.mShape[0];  i++){
+		for (int j=0; j<A.mShape[1]; j++){
+			C.mData[i][j] = a*A.mData[i][j];
+		}
+	}
+	return C;
+}
+
+
+Matrix operator*(const double& a, const Matrix& A)
+{
+	Matrix C(A.mShape[0],A.mShape[1]);
+	for (int i=0; i<A.mShape[0];  i++){
+		for (int j=0; j<A.mShape[1]; j++){
+			C.mData[i][j] = a*A.mData[i][j];
+		}
+	}
+	return C;
+}
+
+
+std::ostream& operator<<(std::ostream& output, const Matrix& C) {
+  for (int i=0; i<C.mShape[0]; i++)
+    {
+	  output << "(";
+	  for (int j=0; j<C.mShape[1]; j++)
+	      {
+		  output <<  C.mData[i][j];
+		  if (j<C.mShape[1]-1)
+			  output  << ",\t";
+		  else
+			  output  << "";
+	      }
+	  output <<")\n";
+    }
+  return output;  // for multiple << operators.
+}
+
+Matrix diag(const Matrix& A){
+	Matrix C(A.mShape[0],A.mShape[1]);
+	for (int i=0; i<A.mShape[0];  i++){
+		for (int j=0; j<A.mShape[1]; j++){
+			if (i==j)
+				C.mData[i][j] = A.mData[i][j];
+		}
+	}
+	return C;
+}
+
+Vector Matrix::diag(){
+	if (mShape[0] <= mShape[1]){
+		Vector v(mShape[0]);
+		for (int i=0; i<mShape[0];  i++){
+					for (int j=0; j<mShape[0]; j++){
+						if (i==j)
+							v.set_val( i+1 , mData[i][j]);
+					}
+				}
+		return v;
+	}
+	else {
+		Vector v(mShape[1]);
+		for (int i=0; i<mShape[1];  i++){
+			for (int j=0; j<mShape[1]; j++){
+				if (i==j)
+					v.set_val(i+1, mData[i][j]);
+			}
+		}
+		return v;
+	}
+}
+
+void Matrix::set_val(int i, int j, double x){
+	mData[i-1][j-1] = x;
+}
+
+Matrix diag(Vector& v){
+	int k =length(v);
+	Matrix C(k,k);
+	for (int i=1; i<=k; i++){
+		C(i,i)= v(i);
+	}
+	return C;
+}
+
+
+Matrix::Matrix(const Matrix& C){
+	mShape[0]=C.mShape[0];
+	mData=new double* [C.mShape[0]];
+	mShape[1]=C.mShape[1];
+	for (int i=0; i<C.mShape[0];  i++){
+		mData[i] = new double[C.mShape[1]];
+			for (int j=0; j<C.mShape[1]; j++){
+				mData[i][j] =  C.mData[i][j];
+			}
+	}
+}
+
+Vector LUsolve(Matrix& A, Vector& v){
+	assert(nrows(A) == ncols(A));
+	// we want a square system
+
+	// INITIALISATION
+	Matrix U=A;
+	int m =nrows(A);
+	Vector temp=ones(m);
+	Matrix L = diag(temp);
+	//LU FACTORISATION
+	for (int k=1; k<=m-1; k++){
+		for(int j = k+1; j<=m; j++){
+			L.set_val(j,k,   (U(j,k)/U(k,k)));
+			for (int l=k; l<=m; l++){
+				U.set_val(j,l, (U(j,l) - U(k,l)*L(j,k)));
+			}
+		}
+	}
+	//std::cout<<L<<std::endl;
+	Vector y(m);
+	// FORWARD SOLVE
+	for (int k=0; k<m; k++){
+		y.set_val(k+1, v(k+1));
+		for(int j = 0; j<k; j++){
+			y.set_val(k+1, y(k+1)-(L(k+1,j+1))*y(j+1));
+		}
+		y.set_val(k+1, y(k+1)/L(k+1,k+1));
+		}
+	//std::cout<<y<<std::endl;
+	Vector x(m);
+	// BACKSUBSTITUTION
+	for (int k=m-1; k>=0; k--){
+		x.set_val(k+1, y(k+1));
+		for (int j = k+1; j<m; j++){
+			x.set_val(k+1, x(k+1)- U(k+1,j+1)*x(j+1));
+		}
+		x.set_val(k+1, x(k+1)/U(k+1,k+1));
+	}
+	//std::cout<<U<<std::endl;
+	return x;
+}
+Vector QRsolve(Matrix& A, Vector& v){
+	// QR via Householder
+	assert(nrows(A) == ncols(A));
+	int m = ncols(A);
+	Matrix R= A;
+	Vector temp=ones(m);
+	Matrix Q = diag(temp);
+    for (int j = 0; j<m; j++){
+    	Matrix x(m-j,1);
+    	double len=0.0;
+    	for (int l=j; l<m; l++){
+    		x.set_val(l+1-j,1 ,R(l+1,j+1));
+    		len+=R(l+1,j+1) * R(l+1,j+1);
+    	}
+
+    	len=sqrt(len);
+
+    	int sign = (x(1,1) >= 0) - (x(1,1) < 0);
+    	Matrix e(m-j,1);
+    	e.set_val(1,1,1.0);
+
+    	Matrix u = (sign*len*e + x);
+
+    	// normalise u
+    	len=0.0;
+    	for (int i = 1; i<=m-j; i++){
+    		len+=u(i,1)*u(i,1);
+    	}
+    	u=u* (1./sqrt(len));
+ //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
+
+    	// SUBMULTIPLICATION    START /////////////////////////////
+    	Matrix sub(m-j, m-j);
+    	Matrix subQ(m,m-j);
+    	for (int i = j; i<m; i++){
+    	//	std::cout<<i<<std::flush<<std::endl;
+    		for (int h = j; h<m; h++){
+    			sub.set_val(i+1 - j,h+1 - j, R(i+1,h+1));
+    		}
+    	}
+
+    	for (int i = 0; i<m; i++){
+			for (int h = j; h<m; h++){
+				subQ.set_val(i+1,h+1-j,Q(i+1,h+1));
+			}
+		}
+
+    	Matrix w=(u.T());
+    	Matrix z= w*sub;
+  //  	std::cout<<"here is sub pre   "<<std::endl<< u*z<<std::flush<< std::endl;
+    	sub = sub -2.0*(u*z);
+
+    	Vector temp2= ones(m-j);
+    	Matrix subeye= diag(temp2);
+    	Matrix temp3= subeye -2.0*(u*w);
+    	subQ= subQ*(temp3);
+
+//    	std::cout<<"here is sub post   "<<std::endl<< sub<<std::flush<< std::endl;
+    	for (int i = j; i<m; i++){
+    		for (int h = j; h<m; h++){
+    			R.set_val(i+1,h+1, sub(i+1- j,h+1- j));
+    		}
+    	}
+
+    	for (int i = 0; i<m; i++){
+			for (int h = j; h<m; h++){
+				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
+			}
+		}
+
+    	// SUBMULTIPLICATION  END  ////////////////////////////
+
+    }
+//    std::cout<< "here is R "<< std::endl<< R<<std::endl<<std::flush;
+//    std::cout<< "here is Q "<< std::endl<< Q<<std::endl<<std::flush;
+//    std::cout<< "here is QR "<< std::endl<< Q*R<<std::endl<<std::flush;
+
+    // Invert Q multiply b with it.
+    Matrix QT=Q.T();
+    Vector v2=QT* v;
+    //BACKWARD SOLVE FOR X
+	Vector x(m);
+	for (int k=m-1; k>=0; k--){
+		x.set_val(k+1, v2(k+1));
+		for (int j = k+1; j<m; j++){
+			x.set_val(k+1, x(k+1)- R(k+1,j+1)*x(j+1));
+			}
+		x.set_val(k+1, x(k+1)/R(k+1,k+1));
+		}
+//	std::cout<< A*x -v <<std::endl;
+	return x;
+}
+Vector QRsolve2(Matrix& A, Vector& b){
+	assert(nrows(A) == ncols(A));
+	int m = ncols(A);
+	Matrix V(m-1,m-1);
+	for (int k=0; k<m ;k++){
+		Vector xx(m-k);
+		for (int j=1;j<=m-k; j++){
+			xx.set_val(j, A(j+k,k+1));
+		}
+		//std::cout<<xx<<std::endl<<std::flush;
+		Vector vk(m-k);
+		double len =xx.norm();
+		vk.set_val(1,len);
+
+		vk = vk+ xx;
+		vk = vk / vk.norm();
+
+		Matrix A_sub(m-k,m-k);
+    	for (int i = k; i<m; i++){
+    		for (int h = k; h<m; h++){
+    			A_sub.set_val(i-k+1,h-k+1, A(i+1,h+1));
+    		}
+    	}
+    	//std::cout<<A<<std::endl<<std::flush;
+    	//std::cout<<A_sub<<std::endl<<std::flush;
+		Matrix vk2(m-k,1);
+		for (int jj=1 ; jj<=m-k;jj++){
+			vk2.set_val(jj,1, vk(jj));
+		}
+		Matrix vk2T= vk2.T();
+		Matrix vk3 = vk2T*A_sub;
+		//std::cout<<vk2<<std::endl<<std::flush;
+		Matrix A_sub2 = vk2*vk3;
+
+
+		A_sub2 = 2*A_sub2;
+		A_sub2 = A_sub - A_sub2;
+		//std::cout<<A<<std::endl<<std::flush;
+
+		for (int j = k; j<m; j++){
+			for (int h=k; h<m; h++){
+				A.set_val(j+1,h+1,A_sub2(j+1-k, h+1-k) );
+			}
+		}
+		Vector bk2(m-k);
+		for (int jj=k ; jj<m;jj++){
+			bk2.set_val(jj+1-k,b(jj+1));
+		}
+		Vector bk3  =  vk;
+		double temp = (vk*bk2);
+		//std::cout<<temp<<std::endl<<std::flush;
+		bk3 = temp*vk;
+		bk3 = 2*bk3;
+		bk3 = bk2 - bk3;
+		for (int jj=k ; jj<m;jj++){
+			b.set_val(jj+1, bk3(jj-k+1));
+		}
+		for (int j=1; j<=m-k-1; j++){
+			V.set_val(j,k+1,vk(j));
+		}
+	}
+	//std::cout<<b<<std::endl<<std::flush;
+	Vector x(m);
+	/// BACKSOLving////////
+	for (int k=m-1; k>=0; k--){
+		x.set_val(k+1, b(k+1));
+		for (int j = k+1; j<m; j++){
+			x.set_val(k+1, x(k+1)- A(k+1,j+1)*x(j+1));
+			}
+		x.set_val(k+1, x(k+1)/A(k+1,k+1));
+		}
+
+//	std::cout<<V<<std::endl <<std::flush;
+//	for (int k=m; k>0 ;k--){
+//		Matrix xk2(m-k,1);
+//		for (int jj=1 ; jj<=m-k;jj++){
+//			xk2.set_val(jj,1, x(jj));
+//		}
+//		//std::cout<<xk2<<std::endl <<std::flush;
+//		Vector vk  =  V.get_col(k);
+//		Matrix vk2(m-k,1);
+//		for (int jj=1 ; jj<=m-k;jj++){
+//			vk2.set_val(jj,1, vk(jj));
+//		}
+//		Matrix vk2T = vk2.T();
+//		//std::cout<<nrows(vk2T)<<std::endl <<std::flush;
+//		Matrix temp = (vk2T*vk2);
+//		double sc = temp(1,1);
+//		vk2 = sc*vk2;
+//		for (int jj=1 ; jj<=m-k;jj++){
+//			x.set_val(jj, vk2(jj,1));
+//		}
+//	}
+	return x;
+}
+
+
+
+
+Vector Jacobi(Matrix& A, Vector& v, int& count){
+	assert(nrows(A) == ncols(A));
+	int m =nrows(A);
+	// we want a square system
+
+	// INITIALISATION
+	Matrix D=diag(A);
+	for (int k=1; k<=m; k++){
+		D.set_val(k,k, (1./D(k,k)));
+	}
+	Vector temp = ones(m);
+	Matrix eye = diag(temp);
+	Matrix T =  (eye - D*A);
+	Vector c = D*v;
+	double tol = 1.e-12;
+	Vector x=c;
+	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
+	while ((A*x -v).norm() > tol){
+		count+=1;
+		x= T*x + c;
+	//	std::cout<<(A*x -v).norm() << std::endl<<std::flush;
+	}
+//	std::cout<<count<<std::endl<<std::flush;
+
+	return x;
+}
+
+
+Vector SOR(Matrix& A, Vector& v, double w, int& count){
+	assert(nrows(A) == ncols(A));
+	int m =nrows(A);
+	// we want a square system
+
+	// INITIALISATION
+	Matrix D=diag(A);
+	for (int k=1; k<=m; k++){
+		if (D(k,k)!= 0) {
+		D.set_val(k,k, (1./D(k,k)));
+		}
+	}
+	Matrix U(m,m);
+	Matrix L(m,m);
+	for (int i=1; i<=m; i++){
+		for (int j=1; j<=m; j++){
+			if (i>j) {
+				L.set_val(i,j, A(i,j));
+			}
+			if (i<j) {
+				U.set_val(i,j, A(i,j));
+			}
+		}
+	}
+	Vector temp = ones(m);
+	Matrix Lbar= D*L;
+	Matrix LL= (diag(temp) + w*Lbar);
+	// T = (1+wLbar)**-1 ((1-w)11 - wU)
+	// T = LL ((1-w)11 - wU)
+	Matrix Ubar=D*U;
+	Matrix M = diag(temp);
+	M= M*(1.-w) -  w*Ubar;
+	Vector c =  (D*v) *w;
+	double tol = 1.e-12;
+	Vector x=c;
+	Vector rh(m);
+	while ((A*x -v).norm() >tol){
+		count+=1;
+		rh = M*x + c;
+		//std::cout<<x<<std::endl<<std::flush;
+		//forward solve
+		for (int k=0; k<m; k++){
+			x.set_val(k+1, rh(k+1));
+			for(int j = 0; j<k; j++){
+				x.set_val(k+1, x(k+1)-(LL(k+1,j+1))*x(j+1));
+			}
+			x.set_val(k+1, x(k+1)/LL(k+1,k+1));
+		}
+
+	}
+//	std::cout<<count<<std::endl<<std::flush;
+	return x;
+}
+
+Matrix randm(Matrix& A){
+	int m = nrows(A);
+	//srand( (unsigned)time( NULL ) );
+	for (int i=1; i<=m ; i++){
+		for (int j=1; j<=m ; j++){
+			A.set_val(i,j, (float)rand()/RAND_MAX);
+		}
+	}
+	return A;
+}
+Matrix qr_q(Matrix& A){
+	int m = ncols(A);
+	Matrix R= A;
+	Vector temp=ones(m);
+	Matrix Q = diag(temp);
+    for (int j = 0; j<m; j++){
+    	Matrix x(m-j,1);
+    	double len=0.0;
+    	for (int l=j; l<m; l++){
+    		x.set_val(l+1-j,1 ,R(l+1,j+1));
+    		len+=R(l+1,j+1) * R(l+1,j+1);
+    	}
+
+    	len=sqrt(len);
+
+    	int sign = (x(1,1) >= 0) - (x(1,1) < 0);
+    	Matrix e(m-j,1);
+    	e.set_val(1,1,1.0);
+
+    	Matrix u = (sign*len*e + x);
+
+    	// normalise u
+    	len=0.0;
+    	for (int i = 1; i<=m-j; i++){
+    		len+=u(i,1)*u(i,1);
+    	}
+    	u=u* (1./sqrt(len));
+ //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
+
+    	// SUBMULTIPLICATION    START /////////////////////////////
+    	Matrix sub(m-j, m-j);
+    	Matrix subQ(m,m-j);
+    	for (int i = j; i<m; i++){
+    		for (int h = j; h<m; h++){
+    			sub.set_val(i+1 - j,h+1 - j, R(i+1,h+1));
+    		}
+    	}
+
+    	for (int i = 0; i<m; i++){
+			for (int h = j; h<m; h++){
+				subQ.set_val(i+1,h+1-j,Q(i+1,h+1));
+			}
+		}
+
+    	Matrix w=(u.T());
+    	Matrix z= w*sub;
+    	sub = sub -2.0*(u*z);
+
+    	Vector temp2= ones(m-j);
+    	Matrix subeye= diag(temp2);
+    	Matrix temp3= subeye -2.0*(u*w);
+    	subQ= subQ*(temp3);
+    	for (int i = j; i<m; i++){
+    		for (int h = j; h<m; h++){
+    			R.set_val(i+1,h+1, sub(i+1- j,h+1- j));
+    		}
+    	}
+
+    	for (int i = 0; i<m; i++){
+			for (int h = j; h<m; h++){
+				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
+			}
+		}
+    }
+    return Q;
+
+}
+
+Vector SD(Matrix& A, Vector& v, int& count){
+	assert(nrows(A) == ncols(A));
+	int m =nrows(A);
+	// we want a square system
+
+	// INITIALISATION
+	Vector x= v;
+	double tol = 1.e-12;
+	double top;
+	Vector r = A*x;
+	r= r-v;
+	double bottom;
+	Vector temp(m);
+	double alpha;
+	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
+	while ((A*x -v).norm() > tol){
+		top = r*r;
+		temp = A*r;
+		bottom = r*temp;
+		alpha= top/bottom;
+		count+=1;
+		x = x + alpha*r;
+		r = v - A*x;
+	}
+//	std::cout<<count<<std::endl<<std::flush;
+
+	return x;
+}
+
+Vector CG(Matrix& A, Vector& v, int& count){
+	assert(nrows(A) == ncols(A));
+	int m =nrows(A);
+	// we want a square system
+
+	// INITIALISATION
+	Vector x= v;
+	double tol = 1.e-12;
+	Vector r = A*x;
+	Vector p = r;
+	r= r-v;
+	Vector temp(m);
+	temp = A*r;
+	double alpha;
+	alpha = r*temp;
+	alpha = ((r.norm())*(r.norm()))/alpha;
+	x = x +alpha *r;
+	r = v - A*x;
+	double beta;
+	double anorm;
+	Vector temp2(m);
+	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
+	while ((A*x -v).norm() > tol){
+		temp = A*r;
+		temp2 = A*p;
+		beta = r*temp2;
+		anorm = p*temp2;
+		beta = beta /anorm;
+		p= r-beta*p;
+		alpha = r*p;
+		alpha = alpha/anorm;
+		count+=1;
+		x = x + alpha*p;
+		r = v - A*x;
+	}
+//	std::cout<<count<<std::endl<<std::flush;
+
+	return x;
+}
