@@ -146,12 +146,51 @@ int main_linear_solvers()
 
 int main()
 {
-	int N = 20;
+	int i = 20;
+	/*
 	Matrix G(N,N);
-	G = er_graph(G,0.7);
+	G = er_graph(G,0.2);
   //cout<<G<<",";
 	Matrix D(N,N);
 	D = floyd_war(G);
 	cout<<D<<",";
+	*/
+	cout<< endl;
+	Vector x(i);
+	x= randv(x);
+	Matrix Q(i,i);
+	Q = randm(Q);
+	Q= qr_q(Q);
+	Matrix QT=Q.T();
+	Vector d(i);
+
+	double k0 = 2.0;
+	for (double j=1; j<=i;  j++){
+		double x = k0/j;
+		d.set_val(int(j),x);
+	}
+	Matrix Lambda(i,i);
+	Lambda= diag(d);
+	Matrix A(i,i);
+	A= QT * Lambda;
+	A= A*Q;
+
+	Vector b = A*x;
+	clock_t begin = clock();
+	int count = 0;
+	Vector x1 = SD(A,b, count);
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout<< count<<","<< elapsed_secs << ",";
+
+	begin = clock();
+	count = 0;
+	x1 = momentum(A,b, count,0.5,0.2);
+	end = clock();
+	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout<< count<<","<< elapsed_secs << ",";
+
+
+	cout<< endl;
 	return 1;
 }

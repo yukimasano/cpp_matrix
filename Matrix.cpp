@@ -13,8 +13,9 @@ Matrix::Matrix(int rows, int cols)
 		mData[i] = new double[cols];
 		for (int j=0; j<cols; j++){
 			mData[i][j] = 0.0;
-		}
-	}
+
+  	}
+  }
 }
 
 
@@ -316,7 +317,7 @@ Matrix floyd_war(Matrix& A){
   assert(nrows(A)==ncols(A));
   int s = nrows(A);
   Matrix B(s,s);
-  B= B + 1e8;
+  B= B + 999999999;
 	for (int i=1; i<=s; i++){
     B.set_val(i,i,0);
   }
@@ -339,7 +340,22 @@ Matrix floyd_war(Matrix& A){
 	}
 	return B;
 }
-
+/*
+Vector betweenness_c(Matrix& D){
+  assert(nrows(D)==ncols(D));
+  int s = nrows(D);
+  Vector v;
+  for (int k=1; k<=nrows(D); k++){
+    double a;
+    for (int j=1; j<=nrows(D); j++){
+      if ((j!=k) && (D(k,j)!=999999999)){
+        a+=
+      }
+    }
+  }
+	return v;
+}
+*/
 // LINEAR SOLVERS
 Vector LUsolve(Matrix& A, Vector& v){
 	assert(nrows(A) == ncols(A));
@@ -760,5 +776,28 @@ Vector CG(Matrix& A, Vector& v, int& count){
 		r = v - A*x;
 	}
   //	std::cout<<count<<std::endl<<std::flush;
+	return x;
+}
+
+Vector momentum(Matrix& A, Vector& v, int& count,double lambda,double mu){
+	assert(nrows(A) == ncols(A));
+	int m =nrows(A);
+	// we want a square system
+
+	// INITIALISATION
+	Vector x= v;
+	double tol = 1.e-12;
+	Vector r = A*x;
+	r= r-v;
+	Vector temp(m);
+	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
+	while ((A*x -v).norm() > tol){
+		count+=1;
+    temp = mu*temp - lambda*r;
+		x = x + temp;
+		r = v - A*x;
+	}
+   //	std::cout<<count<<std::endl<<std::flush;
+
 	return x;
 }

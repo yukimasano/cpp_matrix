@@ -74,6 +74,8 @@ Vector operator*(Matrix& A, Vector& b);
 Vector Jacobi(Matrix& A, Vector& v, int& count);
 Vector SOR(Matrix& A, Vector& v, double w, int& count);
 Vector SD(Matrix& A, Vector& v, int& count);
+Vector momentum(Matrix& A, Vector& v, int& count, double lambda,double mu);
+
 Vector CG(Matrix& A, Vector& v, int& count);
 Vector LUsolve(Matrix& A, Vector& v);
 Vector QRsolve(Matrix& A, Vector& v);
