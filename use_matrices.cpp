@@ -7,7 +7,7 @@
 #include <ctime>
 using namespace std;
 
-int main()
+int main_linear_solvers()
 {
 	for (int i=122; i<=200; i+=2){
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
@@ -125,7 +125,7 @@ int main()
 		double delx = (x1 - x).norm();
 		cout<< elapsed_secs << ","<< delx <<",";
 
-	    begin = clock();
+	  begin = clock();
 		x1 = QRsolve2(A,b);
 		end = clock();
 		elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -142,4 +142,16 @@ int main()
 		cout<<endl;
 	}
     return 1;
+}
+
+int main()
+{
+	int N = 20;
+	Matrix G(N,N);
+	G = er_graph(G,0.7);
+  //cout<<G<<",";
+	Matrix D(N,N);
+	D = floyd_war(G);
+	cout<<D<<",";
+	return 1;
 }

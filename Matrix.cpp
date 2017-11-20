@@ -60,41 +60,11 @@ int ncols(const Matrix& C)
 	return C.mShape[1];
 }
 
-
-Matrix operator+(const Matrix& A, const Matrix& B)
-{
-	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
-	Matrix W(A.mShape[0], A.mShape[1]);
-  	W.mData=new double* [W.mShape[0]];
-  	for (int i=0; i<W.mShape[0];  i++){
-  		W.mData[i] = new double[W.mShape[1]];
-  		for (int j=0; j<W.mShape[1]; j++){
-  			W.mData[i][j] = A.mData[i][j]+ B.mData[i][j];
-  		}
-  	}
-  return W;
-}
-
-
-Matrix operator-(const Matrix& A, const Matrix& B)
-{
-	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
-	Matrix W(A.mShape[0], A.mShape[1]);
-  	W.mData=new double* [W.mShape[0]];
-  	for (int i=0; i<W.mShape[0];  i++){
-  		W.mData[i] = new double[W.mShape[1]];
-  		for (int j=0; j<W.mShape[1]; j++){
-  			W.mData[i][j] = A.mData[i][j]- B.mData[i][j];
-  		}
-  	}
-  return W;
-}
-
 Vector Matrix::get_col(int k)
 {
 	//std::cout<<"before all"<<std::endl<< std::flush;
 	Vector v(mShape[0]);
-//	std::cout<<"after vec"<<std::endl<< std::flush;
+  //	std::cout<<"after vec"<<std::endl<< std::flush;
 	for (int i =1 ; i<=mShape[0]; i++){
 		//std::cout<<"pre-definition"<<std::endl<< std::flush;
 		//std::cout<< "this is the val  "<< mData[i][k]<< "this is the size  "<<mShape[0] << std::endl<< std::flush;
@@ -113,6 +83,49 @@ Vector Matrix::get_row(int k)
 	}
 	return v;
 }
+
+
+Matrix operator+(const Matrix& A, const Matrix& B)
+{
+	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
+	Matrix W(A.mShape[0], A.mShape[1]);
+  	W.mData=new double* [W.mShape[0]];
+  	for (int i=0; i<W.mShape[0];  i++){
+  		W.mData[i] = new double[W.mShape[1]];
+  		for (int j=0; j<W.mShape[1]; j++){
+  			W.mData[i][j] = A.mData[i][j]+ B.mData[i][j];
+  		}
+  	}
+  return W;
+}
+
+Matrix operator+(const Matrix& A, const double k)
+{
+	Matrix W(A.mShape[0], A.mShape[1]);
+  	W.mData=new double* [W.mShape[0]];
+  	for (int i=0; i<W.mShape[0];  i++){
+  		W.mData[i] = new double[W.mShape[1]];
+  		for (int j=0; j<W.mShape[1]; j++){
+  			W.mData[i][j] = A.mData[i][j]+ k;
+  		}
+  	}
+  return W;
+}
+
+Matrix operator-(const Matrix& A, const Matrix& B)
+{
+	assert(A.mShape[1] == B.mShape[1] && A.mShape[0] == B.mShape[0]);
+	Matrix W(A.mShape[0], A.mShape[1]);
+  	W.mData=new double* [W.mShape[0]];
+  	for (int i=0; i<W.mShape[0];  i++){
+  		W.mData[i] = new double[W.mShape[1]];
+  		for (int j=0; j<W.mShape[1]; j++){
+  			W.mData[i][j] = A.mData[i][j]- B.mData[i][j];
+  		}
+  	}
+  return W;
+}
+
 
 // definition of vector operator =
 Matrix& Matrix::operator=(const Matrix& A)
@@ -149,15 +162,7 @@ Matrix operator-(const Matrix& C)
 	}
 	return W;
 }
-/*
-double s_prod(Vector& a, Vector& b,int length){
-	double c=0.0;
-	for(int i=0; i<length ; i++){
-		c+= a(i)*b(i);
-	}
-	return c;
-}
-*/
+
 Matrix operator*(Matrix& A, Matrix& B){
 	assert(A.mShape[1] == B.mShape[0]);
 	Matrix C(A.mShape[0],B.mShape[1]);
@@ -283,6 +288,59 @@ Matrix::Matrix(const Matrix& C){
 	}
 }
 
+Matrix randm(Matrix& A){
+	int m = nrows(A);
+	//srand( (unsigned)time( NULL ) );
+	for (int i=1; i<=m ; i++){
+		for (int j=1; j<=m ; j++){
+			A.set_val(i,j, (float)rand()/RAND_MAX);
+		}
+	}
+	return A;
+}
+
+Matrix er_graph(Matrix& A,float p){
+  assert(nrows(A)==ncols(A));
+	int s = nrows(A);
+	//srand( (unsigned)time( NULL ) );
+	for (int i=1; i<=s ; i++){
+		for (int j=1; j<=i ; j++){
+			A.set_val(i,j, p>(float)rand()/RAND_MAX);
+      A.set_val(j,i, p>(float)rand()/RAND_MAX);
+		}
+	}
+	return A;
+}
+
+Matrix floyd_war(Matrix& A){
+  assert(nrows(A)==ncols(A));
+  int s = nrows(A);
+  Matrix B(s,s);
+  B= B + 1e8;
+	for (int i=1; i<=s; i++){
+    B.set_val(i,i,0);
+  }
+  for (int k=1; k<=s; k++){
+		for (int i=1; i<=k; i++){
+      if (A(k,i)!=0){
+        B.set_val(k,i, A(k,i));
+        B.set_val(i,k, A(k,i));
+      }
+    }
+  }
+  for (int k=1; k<=s; k++){
+		for (int i=1; i<=s; i++){
+      for (int j=1; j<=s; j++){
+        if (B(i,j) > B(i,k) + B(k,j)){
+          B.set_val(i,j,B(i,k)+B(k,j));
+        }
+      }
+		}
+	}
+	return B;
+}
+
+// LINEAR SOLVERS
 Vector LUsolve(Matrix& A, Vector& v){
 	assert(nrows(A) == ncols(A));
 	// we want a square system
@@ -353,7 +411,7 @@ Vector QRsolve(Matrix& A, Vector& v){
     		len+=u(i,1)*u(i,1);
     	}
     	u=u* (1./sqrt(len));
- //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
+      //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
 
     	// SUBMULTIPLICATION    START /////////////////////////////
     	Matrix sub(m-j, m-j);
@@ -373,7 +431,7 @@ Vector QRsolve(Matrix& A, Vector& v){
 
     	Matrix w=(u.T());
     	Matrix z= w*sub;
-  //  	std::cout<<"here is sub pre   "<<std::endl<< u*z<<std::flush<< std::endl;
+      //  	std::cout<<"here is sub pre   "<<std::endl<< u*z<<std::flush<< std::endl;
     	sub = sub -2.0*(u*z);
 
     	Vector temp2= ones(m-j);
@@ -381,7 +439,7 @@ Vector QRsolve(Matrix& A, Vector& v){
     	Matrix temp3= subeye -2.0*(u*w);
     	subQ= subQ*(temp3);
 
-//    	std::cout<<"here is sub post   "<<std::endl<< sub<<std::flush<< std::endl;
+      //    	std::cout<<"here is sub post   "<<std::endl<< sub<<std::flush<< std::endl;
     	for (int i = j; i<m; i++){
     		for (int h = j; h<m; h++){
     			R.set_val(i+1,h+1, sub(i+1- j,h+1- j));
@@ -397,9 +455,9 @@ Vector QRsolve(Matrix& A, Vector& v){
     	// SUBMULTIPLICATION  END  ////////////////////////////
 
     }
-//    std::cout<< "here is R "<< std::endl<< R<<std::endl<<std::flush;
-//    std::cout<< "here is Q "<< std::endl<< Q<<std::endl<<std::flush;
-//    std::cout<< "here is QR "<< std::endl<< Q*R<<std::endl<<std::flush;
+    //    std::cout<< "here is R "<< std::endl<< R<<std::endl<<std::flush;
+    //    std::cout<< "here is Q "<< std::endl<< Q<<std::endl<<std::flush;
+    //    std::cout<< "here is QR "<< std::endl<< Q*R<<std::endl<<std::flush;
 
     // Invert Q multiply b with it.
     Matrix QT=Q.T();
@@ -413,7 +471,7 @@ Vector QRsolve(Matrix& A, Vector& v){
 			}
 		x.set_val(k+1, x(k+1)/R(k+1,k+1));
 		}
-//	std::cout<< A*x -v <<std::endl;
+    //	std::cout<< A*x -v <<std::endl;
 	return x;
 }
 Vector QRsolve2(Matrix& A, Vector& b){
@@ -487,34 +545,8 @@ Vector QRsolve2(Matrix& A, Vector& b){
 			}
 		x.set_val(k+1, x(k+1)/A(k+1,k+1));
 		}
-
-//	std::cout<<V<<std::endl <<std::flush;
-//	for (int k=m; k>0 ;k--){
-//		Matrix xk2(m-k,1);
-//		for (int jj=1 ; jj<=m-k;jj++){
-//			xk2.set_val(jj,1, x(jj));
-//		}
-//		//std::cout<<xk2<<std::endl <<std::flush;
-//		Vector vk  =  V.get_col(k);
-//		Matrix vk2(m-k,1);
-//		for (int jj=1 ; jj<=m-k;jj++){
-//			vk2.set_val(jj,1, vk(jj));
-//		}
-//		Matrix vk2T = vk2.T();
-//		//std::cout<<nrows(vk2T)<<std::endl <<std::flush;
-//		Matrix temp = (vk2T*vk2);
-//		double sc = temp(1,1);
-//		vk2 = sc*vk2;
-//		for (int jj=1 ; jj<=m-k;jj++){
-//			x.set_val(jj, vk2(jj,1));
-//		}
-//	}
 	return x;
 }
-
-
-
-
 Vector Jacobi(Matrix& A, Vector& v, int& count){
 	assert(nrows(A) == ncols(A));
 	int m =nrows(A);
@@ -537,12 +569,10 @@ Vector Jacobi(Matrix& A, Vector& v, int& count){
 		x= T*x + c;
 	//	std::cout<<(A*x -v).norm() << std::endl<<std::flush;
 	}
-//	std::cout<<count<<std::endl<<std::flush;
+  //	std::cout<<count<<std::endl<<std::flush;
 
 	return x;
 }
-
-
 Vector SOR(Matrix& A, Vector& v, double w, int& count){
 	assert(nrows(A) == ncols(A));
 	int m =nrows(A);
@@ -593,20 +623,10 @@ Vector SOR(Matrix& A, Vector& v, double w, int& count){
 		}
 
 	}
-//	std::cout<<count<<std::endl<<std::flush;
+  //	std::cout<<count<<std::endl<<std::flush;
 	return x;
 }
 
-Matrix randm(Matrix& A){
-	int m = nrows(A);
-	//srand( (unsigned)time( NULL ) );
-	for (int i=1; i<=m ; i++){
-		for (int j=1; j<=m ; j++){
-			A.set_val(i,j, (float)rand()/RAND_MAX);
-		}
-	}
-	return A;
-}
 Matrix qr_q(Matrix& A){
 	int m = ncols(A);
 	Matrix R= A;
@@ -634,7 +654,7 @@ Matrix qr_q(Matrix& A){
     		len+=u(i,1)*u(i,1);
     	}
     	u=u* (1./sqrt(len));
- //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
+      //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
 
     	// SUBMULTIPLICATION    START /////////////////////////////
     	Matrix sub(m-j, m-j);
@@ -699,7 +719,7 @@ Vector SD(Matrix& A, Vector& v, int& count){
 		x = x + alpha*r;
 		r = v - A*x;
 	}
-//	std::cout<<count<<std::endl<<std::flush;
+   //	std::cout<<count<<std::endl<<std::flush;
 
 	return x;
 }
@@ -739,7 +759,6 @@ Vector CG(Matrix& A, Vector& v, int& count){
 		x = x + alpha*p;
 		r = v - A*x;
 	}
-//	std::cout<<count<<std::endl<<std::flush;
-
+  //	std::cout<<count<<std::endl<<std::flush;
 	return x;
 }

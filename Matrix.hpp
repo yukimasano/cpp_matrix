@@ -44,6 +44,7 @@ public:
    void set_val(int i, int j, double x);
    // add and substract
    friend Matrix operator+(const Matrix& v1, const Matrix& v2);
+   friend Matrix operator+(const Matrix& A, const double k);
    friend Matrix operator-(const Matrix& v1, const Matrix& v2);
    // Multiplications
    friend Matrix operator*(Matrix& v1, Matrix& v2);
@@ -60,6 +61,7 @@ Matrix operator-(const Matrix& v);
 Matrix diag(const Matrix& C);
 Matrix diag( Vector& v);
 Matrix operator+(const Matrix& v1, const Matrix& v2);
+Matrix operator+(const Matrix& A, const double k);
 Matrix operator-(const Matrix& v1, const Matrix& v2);
 
 //double s_prod(Vector& a, Vector& b,int length);
@@ -78,4 +80,8 @@ Vector QRsolve(Matrix& A, Vector& v);
 Vector QRsolve2(Matrix& A, Vector& v);
 Matrix randm(Matrix& A);
 Matrix qr_q(Matrix & A);
+// graph functions
+Matrix er_graph(Matrix& A,float p);
+Matrix floyd_war(Matrix& A);
+
 #endif
