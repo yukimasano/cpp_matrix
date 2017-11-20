@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Matrix.hpp"
+#include <tuple>
 #include <cassert>
 #include <stdlib.h>
 // constructor that creates matrix of given size with
@@ -357,6 +358,30 @@ Vector betweenness_c(Matrix& D){
 }
 */
 // LINEAR SOLVERS
+
+
+
+Vector evec_c(Matrix& A){
+	assert(nrows(A) == ncols(A));
+	// INITIALISATION
+	Vector x(nrows(A));
+  Vector xold(nrows(A));
+  xold  = randv(xold);
+  x  = randv(x);
+  float eps = 1.0;
+  float lam;
+  while (eps>1e-15){
+    x = A*x;
+    lam = (xold*x)/xold.norm();
+    x = x/x.norm();
+    eps=(x-xold).norm();
+    xold=x;
+  }
+  signed int s = (lam>0) - (lam<0);
+  x= x*s;
+  return x;
+}
+
 Vector LUsolve(Matrix& A, Vector& v){
 	assert(nrows(A) == ncols(A));
 	// we want a square system
