@@ -191,7 +191,7 @@ plt.loglog(a[:,0], a[:,2],'x-', label = 'SD')
 plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
 
 
-plt.loglog(a[:,0], a[:,9],'rx-', label = 'LU')
+plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
 
 plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
 plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
@@ -209,7 +209,7 @@ plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
                
                
-y = np.log(a[:,9]) 
+y = np.log(a[:,7]) 
 x= np.log(a[:,0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
@@ -251,7 +251,7 @@ fig.savefig('sameKappa_time_new.pdf', dpi=500)
 
 fig3 = plt.figure()
 
-y = np.log(a[:,6]) 
+y = np.log(a[:,8]) 
 x= np.log(a[:,0])
     
 m,b = np.polyfit(x, y, 1)
@@ -260,12 +260,12 @@ y100= np.exp(m*np.log(a[-1,0] )+b)
 
 plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=3,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
-plt.loglog(a[:,0], a[:,6],'x-', label = 'LU')
-plt.loglog(a[:,0], a[:,8],'x-', label = 'QR')
-plt.loglog(a[:,0], a[:,10],'x-', label = 'QR (expl. Q)')
+plt.loglog(a[:,0], a[:,8],'x-', label = 'LU')
+plt.loglog(a[:,0], a[:,10],'x-', label = 'QR')
+plt.loglog(a[:,0], a[:,12],'x-', label = 'QR (expl. Q)')
 plt.xlim(xmax=max(a[:,0]))
-plt.title('Accuracy for different sizes',fontsize=15)
+plt.title(r'Accuracy for different sizes, $\kappa=2$',fontsize=15)
 plt.xlabel('Size N',fontsize=15)
 plt.ylabel('Error',fontsize=15)
 plt.legend(loc='best', fontsize=12, ncol=2)
-fig3.savefig('Tex/figs/sameKappa_Accuracy.png', dpi=500)
+fig3.savefig('Tex/figs/sameKappa_Accuracy_new.png', dpi=500)

@@ -12,9 +12,9 @@ using namespace std;
 int main()
 {
 	ofstream outfile;
-	outfile.open("same_kappa_new.txt",ofstream::app);
+	outfile.open("same_kappa2_new.txt",ofstream::app);
 	int i = 1;
-	for (int j=99; j<=100; j+=1){
+	for (int j=20; j<=110; j+=1){
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
 		// iters GaussSeidel| time GS | iters SOR(1.5) | time SOR(1.5) | ...
 		// iters SOR(0.5) | time (SOR0.5)| time LU solve | time QR solve
@@ -62,7 +62,7 @@ int main()
 
 			double k0 = 2.0;
 			for (double j=1; j<=i;  j++){
-				double x = k0/j;
+				double x = ((k0-1)/float(i-1))*(j-1) + 1.;
 				d.set_val(int(j),x);
 			}
 			Matrix Lambda(i,i);
