@@ -7,7 +7,7 @@
 // double precision entries all initially set to zero
 Matrix::Matrix(int rows, int cols)
 {
-  mData=new double* [rows];
+  mData = new double* [rows];
   mShape[0] = rows;
   mShape[1] = cols;
 	for (int i=0; i<rows;  i++){
@@ -23,7 +23,10 @@ Matrix::Matrix(int rows, int cols)
 // destructor - deletes pointer
 Matrix::~Matrix()
 {
-  delete[] mData;
+  for (int i=0; i<mShape[0];  i++){
+		delete[] mData[i];
+  }
+  delete mData;
 }
 
 double& Matrix::operator()(int i, int j)
