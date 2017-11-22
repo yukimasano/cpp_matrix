@@ -200,6 +200,18 @@ Matrix operator*(const Matrix& A, const double& a)
 	return C;
 }
 
+Matrix operator/(const double& a,const Matrix& A)
+{
+	Matrix C(A.mShape[0],A.mShape[1]);
+	for (int i=0; i<A.mShape[0];  i++){
+		for (int j=0; j<A.mShape[1]; j++){
+      if (A.mData[i][j]!=0){
+			     C.mData[i][j] = a/A.mData[i][j];
+      }
+		}
+	}
+	return C;
+}
 
 Matrix operator*(const double& a, const Matrix& A)
 {
@@ -770,6 +782,49 @@ Vector CG(Matrix& A, Vector& v, int& count){
 	int m =nrows(A);
 	// we want a square system
 
+	// INITIALISATION
+	Vector x= v;
+	double tol = 1.e-12;
+	Vector r = A*x;
+	Vector p = r;
+	r= r-v;
+	Vector temp(m);
+	temp = A*r;
+	double alpha;
+	alpha = r*temp;
+	alpha = ((r.norm())*(r.norm()))/alpha;
+	x = x +alpha *r;
+	r = v - A*x;
+	double beta;
+	double anorm;
+	Vector temp2(m);
+	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
+	while ((A*x -v).norm() > tol){
+		temp = A*r;
+		temp2 = A*p;
+		beta = r*temp2;
+		anorm = p*temp2;
+		beta = beta /anorm;
+		p= r-beta*p;
+		alpha = r*p;
+		alpha = alpha/anorm;
+		count+=1;
+		x = x + alpha*p;
+		r = v - A*x;
+	}
+  //	std::cout<<count<<std::endl<<std::flush;
+	return x;
+}
+Vector CG_pre(Matrix& B, Vector& b, int& count){
+	assert(nrows(B) == ncols(B));
+	int m =nrows(B);
+	// we want a square system
+  // do the preconditioning by multiplying with D^{-1}
+  Matrix D = 1./diag(B);
+  Matrix A = B;
+  A = D*A;
+  Vector v = b;
+  v = D*v;
 	// INITIALISATION
 	Vector x= v;
 	double tol = 1.e-12;

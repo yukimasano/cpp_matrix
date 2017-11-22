@@ -51,6 +51,7 @@ public:
    friend Vector operator*(Matrix& A, Vector& b);
    friend Matrix operator*(const Matrix& v, const double& a);
    friend Matrix operator*(const double& a, const Matrix& v);
+   friend Matrix operator/(const double& a, const Matrix& v);
    Vector diag();
    friend Matrix diag(const Matrix& C);
    friend std::ostream& operator<<(std::ostream& output, const Matrix& C);
@@ -69,6 +70,7 @@ Matrix operator-(const Matrix& v1, const Matrix& v2);
 Matrix operator*( Matrix& v1,  Matrix& v2);
 Matrix operator*(const Matrix& v, const double& a);
 Matrix operator*(const double& a, const Matrix& v);
+Matrix operator/(const double& a, const Matrix& v);
 Vector operator*(Matrix& A, Vector& b);
 
 Vector Jacobi(Matrix& A, Vector& v, int& count);
@@ -77,6 +79,8 @@ Vector SD(Matrix& A, Vector& v, int& count);
 Vector momentum(Matrix& A, Vector& v, int& count, double lambda,double mu);
 
 Vector CG(Matrix& A, Vector& v, int& count);
+Vector CG_pre(Matrix& A, Vector& v, int& count);
+
 Vector LUsolve(Matrix& A, Vector& v);
 Vector QRsolve(Matrix& A, Vector& v);
 Vector QRsolve2(Matrix& A, Vector& v);
