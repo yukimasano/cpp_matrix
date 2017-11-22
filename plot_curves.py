@@ -184,6 +184,7 @@ with open("same_kappa2_new.txt") as tsvfile:
  #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
  
 a=np.array(a,dtype=np.float)
+a[a==0]=np.NaN
 #a = a[:-2,:]       
 
 fig = plt.figure()
@@ -241,11 +242,11 @@ plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
 
 
 plt.xlim(xmax=max(a[:,0]))
-plt.title(r'Time of solving for different sizes, $\kappa =2$',fontsize=15)
+plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
 plt.xlabel('Size N',fontsize=15)
 plt.ylabel('Time in seconds',fontsize=15)
 plt.legend(loc='best', ncol=2,fontsize=11)
-fig.savefig('sameKappa_time_new.pdf', dpi=500)
+fig.savefig('sameKappa10_time_new.pdf', dpi=500)
 #%%
 a=[]
 with open("same_kappa2_new.txt") as tsvfile:
@@ -272,11 +273,11 @@ plt.loglog(a[:,0], a[:,3],'x-', label = 'CG')
 
 
 plt.xlim(xmax=max(a[:,0]))
-plt.title(r'Time of solving for different sizes, $\kappa =2$',fontsize=15)
+plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
 plt.xlabel('Number of iters',fontsize=15)
 plt.ylabel('Time in seconds',fontsize=15)
 plt.legend(loc='best', ncol=2,fontsize=11)
-#fig.savefig('sameKappa_count_new.pdf', dpi=500)
+fig.savefig('sameKappa10_count_new.pdf', dpi=500)
 #%%
 
 fig3 = plt.figure()
