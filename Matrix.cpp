@@ -14,7 +14,6 @@ Matrix::Matrix(int rows, int cols)
 		mData[i] = new double[cols];
 		for (int j=0; j<cols; j++){
 			mData[i][j] = 0.0;
-
   	}
   }
 }
@@ -786,11 +785,10 @@ Vector CG(Matrix& A, Vector& v, int& count){
 	// we want a square system
 
 	// INITIALISATION
-	Vector x= v;
+  Vector x= v;
 	double tol = 1.e-12;
-	Vector r = A*x;
+	Vector r = v - A*x;
 	Vector p = r;
-	r= r-v;
 	Vector temp(m);
 	temp = A*r;
 	double alpha;
@@ -808,8 +806,10 @@ Vector CG(Matrix& A, Vector& v, int& count){
 		beta = r*temp2;
 		anorm = p*temp2;
 		beta = beta /anorm;
-		p= r-beta*p;
+		p = r-beta*p;
 		alpha = r*p;
+    temp2 = A*p;
+    anorm = p*temp2;
 		alpha = alpha/anorm;
 		count+=1;
 		x = x + alpha*p;
@@ -818,22 +818,29 @@ Vector CG(Matrix& A, Vector& v, int& count){
   //	std::cout<<count<<std::endl<<std::flush;
 	return x;
 }
+
+
 Vector CG_pre(Matrix& B, Vector& b, int& count){
 	assert(nrows(B) == ncols(B));
 	int m =nrows(B);
 	// we want a square system
   // do the preconditioning by multiplying with D^{-1}
-  Matrix D = 1./diag(B);
   Matrix A = B;
-  A = D*A;
+  for (int k=1;k<=m;k++){
+    double x = A(k,k);
+    for (int j=1;j<=m;j++){
+      A.set_val(k,j, A(k,j)/x);
+    }
+  }
   Vector v = b;
-  v = D*v;
+  for (int k=1;k<=m;k++){
+    v.set_val(k, v(k)/B(k,k));
+  }
 	// INITIALISATION
 	Vector x= v;
 	double tol = 1.e-12;
-	Vector r = A*x;
+	Vector r = v - A*x;
 	Vector p = r;
-	r= r-v;
 	Vector temp(m);
 	temp = A*r;
 	double alpha;
@@ -851,8 +858,10 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
 		beta = r*temp2;
 		anorm = p*temp2;
 		beta = beta /anorm;
-		p= r-beta*p;
+		p = r-beta*p;
 		alpha = r*p;
+    temp2 = A*p;
+    anorm = p*temp2;
 		alpha = alpha/anorm;
 		count+=1;
 		x = x + alpha*p;

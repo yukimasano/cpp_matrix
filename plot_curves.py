@@ -175,7 +175,7 @@ os.chdir('/Users/yuki/Dropbox/!Dphil/5_ES/cpp_matrix')
 
 a=[]
 
-with open("same_kappa_new.txt") as tsvfile:
+with open("same_kappa2_new.txt") as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
@@ -246,7 +246,37 @@ plt.xlabel('Size N',fontsize=15)
 plt.ylabel('Time in seconds',fontsize=15)
 plt.legend(loc='best', ncol=2,fontsize=11)
 fig.savefig('sameKappa_time_new.pdf', dpi=500)
+#%%
+a=[]
+with open("same_kappa2_new.txt") as tsvfile:
+    tsvreader = csv.reader(tsvfile, delimiter=",")
+    for line in tsvreader:
+        a.append( line)
+ # format    0 size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time, 
+ #           5 CG_pre count 6 CG_pre time 
+ #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
+ 
+a=np.array(a,dtype=np.float)
+#a = a[:-2,:]       
 
+fig = plt.figure()
+plt.loglog(a[:,0], a[:,1],'x-', label = 'SD')
+plt.loglog(a[:,0], a[:,5],'bx-', label = 'CG-pre')
+plt.loglog(a[:,0], a[:,3],'x-', label = 'CG')
+
+
+
+
+
+
+
+
+plt.xlim(xmax=max(a[:,0]))
+plt.title(r'Time of solving for different sizes, $\kappa =2$',fontsize=15)
+plt.xlabel('Number of iters',fontsize=15)
+plt.ylabel('Time in seconds',fontsize=15)
+plt.legend(loc='best', ncol=2,fontsize=11)
+#fig.savefig('sameKappa_count_new.pdf', dpi=500)
 #%%
 
 fig3 = plt.figure()

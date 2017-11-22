@@ -14,7 +14,7 @@ int main()
 	ofstream outfile;
 	outfile.open("same_kappa2_new.txt",ofstream::app);
 	int i = 1;
-	for (int j=20; j<=110; j+=1){
+	for (int j=28; j<=110; j+=1){
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
 		// iters GaussSeidel| time GS | iters SOR(1.5) | time SOR(1.5) | ...
 		// iters SOR(0.5) | time (SOR0.5)| time LU solve | time QR solve
@@ -60,16 +60,21 @@ int main()
 			Matrix QT=Q.T();
 			Vector d(i);
 
-			double k0 = 2.0;
+			double k0 = 10.0;
 			for (double j=1; j<=i;  j++){
 				double x = ((k0-1)/float(i-1))*(j-1) + 1.;
 				d.set_val(int(j),x);
 			}
 			Matrix Lambda(i,i);
 			Lambda = diag(d);
-			Matrix A( i,i);
+			Matrix A(i,i);
 			A = QT * Lambda;
 			A = A*Q;
+
+			Matrix At(i,i);
+			At = A.T();
+			Matrix AA(i,i);
+			AA = At*A;
 
 			////VERSION Diff  KAPPA same size
 			// cout<<i<<",";
@@ -94,6 +99,7 @@ int main()
 			// A= A*Q;
 			/////////////////////////////
 			Vector b = A*x;
+			Vector b2 = At*b;
 			int count = 0;
 			/////////////////////////////////////////////////////
 			//clock_t begin = clock();
@@ -134,6 +140,7 @@ int main()
 
 			begin = clock();
 			count = 0;
+
 			x1 = CG(A,b, count);
 			end = clock();
 			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -164,14 +171,19 @@ int main()
 			delx = (x1 - x).norm();
 			qr_ti += elapsed_secs;
 			qr_dx += delx;
-
-			begin = clock();
-			x1 = QRsolve(A,b);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			delx = (x1 - x).norm();
-			qre_ti += elapsed_secs;
-			qre_dx += delx;
+      if (i<100){
+				begin = clock();
+				x1 = QRsolve(A,b);
+				end = clock();
+				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				delx = (x1 - x).norm();
+				qre_ti += elapsed_secs;
+				qre_dx += delx;
+			}
+			else{
+				qre_ti = 0;
+				qre_dx = 0;
+			}
 		}
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
