@@ -42,6 +42,8 @@ public:
    Vector get_col(int k);
    Vector get_row(int k);
    void set_val(int i, int j, double x);
+   //void set_col(int i, Vector& x);
+
    // add and substract
    friend Matrix operator+(const Matrix& v1, const Matrix& v2);
    friend Matrix operator+(const Matrix& A, const double k);
@@ -86,7 +88,9 @@ Vector QRsolve(Matrix& A, Vector& v);
 Vector QRsolve2(Matrix& A, Vector& v);
 Matrix randm(Matrix& A);
 Matrix qr_q(Matrix& A);
-Matrix rand_basis(Matrix& A);
+Matrix rand_basis_gs(Matrix& A);
+Matrix rand_basis_angle(Matrix& A);
+
 
 // graph functions
 Matrix er_graph(Matrix& A,float p);

@@ -2,7 +2,9 @@
 #include "Matrix.hpp"
 #include <tuple>
 #include <cassert>
+#include <math.h>
 #include <stdlib.h>
+#define _USE_MATH_DEFINES
 // constructor that creates matrix of given size with
 // double precision entries all initially set to zero
 Matrix::Matrix(int rows, int cols)
@@ -281,6 +283,12 @@ Vector Matrix::diag(){
 void Matrix::set_val(int i, int j, double x){
 	mData[i-1][j-1] = x;
 }
+// 
+// void Matrix::set_col(int i, Vector& x){
+// 	for (int k=0;k<mShape[0];k++){
+//     mData[k][i-1] = x(k);
+//   }
+// }
 
 Matrix diag(Vector& v){
 	int k =length(v);
@@ -316,7 +324,8 @@ Matrix randm(Matrix& A){
 	return A;
 }
 
-Matrix rand_basis(Matrix& A){
+Matrix rand_basis_gs(Matrix& A){
+  // using modified Gram-Schmidt
   assert(nrows(A)==ncols(A));
   int i = nrows(A);
   A = randm(A);
@@ -324,20 +333,47 @@ Matrix rand_basis(Matrix& A){
   for (int k=1;k<=i; k++){
     if (k==1){ve=A.get_col(k);}
     else{
-      Vector vei = A.get_col(k);
-      ve = vei;
+      ve = A.get_col(k);
       // do the Gram-Schmidt
       for (int m=1; m<k;m++){
-        ve = ve - (A.get_col(m)*vei)* A.get_col(m);
+        ve = ve - (A.get_col(m)*A.get_col(k))* A.get_col(m);
       }
     }
     ve = ve/ve.norm();
+    //A.set_col(k,ve);
     for (int j=1;j<=i; j++){
-      A.set_val(j,k, ve(j));
+     A.set_val(j,k, ve(j));
     }
   }
 return A;
 }
+
+Matrix rand_basis_angle(Matrix& A){
+  //using spherical coordinates in N-d
+  assert(nrows(A)==ncols(A));
+  int m = nrows(A);
+  A = randm(A);
+  Vector d = A.diag();
+  A.set_val(1,1, A(1,1)*2.0);
+  A = A*M_PI;
+  Matrix B = A;
+  for (int k=1;k<=m;k++){
+    Vector vei = A.get_col(k);
+    for (int j=1;j<=m;j++){
+      if (j<k){
+        vei.set_val(j, -cos(B(j,j))); //orthogonal to previous
+      }
+      else{
+  	    vei.set_val(j,cos(vei(j))); // any direction in that orthogonal space
+      }
+    }
+    for (int j=1;j<=m;j++){
+  	   A.set_val(j,k, vei(j)/vei.norm());
+    }
+  }
+return A;
+}
+
 
 Matrix er_graph(Matrix& A,float p){
   assert(nrows(A)==ncols(A));
@@ -852,8 +888,9 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
   Matrix A = B;
   for (int k=1;k<=m;k++){
     double x = A(k,k);
+    //A.set_col(k, A.get_col(k)/x);
     for (int j=1;j<=m;j++){
-      A.set_val(k,j, A(k,j)/x);
+     A.set_val(k,j, A(k,j)/x);
     }
   }
   Vector v = b;

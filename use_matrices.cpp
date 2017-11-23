@@ -12,9 +12,10 @@ using namespace std;
 int main()
 {
 	ofstream outfile;
-	outfile.open("same_kappa_new2.txt",ofstream::app);
+
 	int i = 1;
-	for (int j=28; j<=110; j+=1){
+	for (int j=85; j<=110; j+=1){
+
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
 		// iters GaussSeidel| time GS | iters SOR(1.5) | time SOR(1.5) | ...
 		// iters SOR(0.5) | time (SOR0.5)| time LU solve | time QR solve
@@ -56,7 +57,7 @@ int main()
 			Vector x(i);
 			x = randv(x);
 			Matrix Q(i,i);
-			Q = rand_basis(Q);
+			Q = rand_basis_gs(Q);
 			Matrix QT=Q.T();
 			Vector d(i);
 			double k0 = 2.0;
@@ -188,6 +189,7 @@ int main()
 				qre_dx = 0;
 			}
 		}
+		outfile.open("same_kappa_new2.txt",ofstream::app);
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
@@ -196,8 +198,8 @@ int main()
 		outfile<< qre_ti/10<<","<< qre_dx/10;
 		outfile<<endl;
 		outfile.flush();
+		outfile.close();
 	}
-	outfile.close();
   return 1;
 }
 

@@ -22,7 +22,7 @@ private:
    // member variables
    double* mData;   // data stored in vector
    int mSize;      // size of vector
-
+   friend class Matrix;
 public:
    // constructors
    // No default constructor
@@ -60,6 +60,7 @@ public:
    // functions that are friends
    friend double norm(Vector& v, int p);
    friend int length(const Vector& v);
+   //friend void set_col(int i, const Vector& x);
 };
 
 

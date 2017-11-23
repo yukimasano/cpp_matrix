@@ -171,11 +171,15 @@ fig3.savefig('Tex/figs/Kappa_Accuracy.png', dpi=500)
 
 #%%
 import os
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+
 os.chdir('/Users/yuki/Dropbox/!Dphil/5_ES/cpp_matrix')
 
 a=[]
 
-with open("same_kappa2_new.txt") as tsvfile:
+with open("same_kappa_new10.txt") as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
@@ -188,25 +192,36 @@ a[a==0]=np.NaN
 #a = a[:-2,:]       
 
 fig = plt.figure()
-plt.loglog(a[:,0], a[:,2],'x-', label = 'SD')
 plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
+plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
 
 
 plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
 
-plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
+plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
+
+plt.loglog(a[:,0], a[:,2],'gx-', label = 'SD')
+
 plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
-plt.loglog(a[:,0], a[:,4],'x-', label = 'CG')
 
 
 
-y = np.log(a[:,11]) 
-x= np.log(a[:,0])
+y = np.log(a[:-(sum(np.isnan(a[:,11]))),11]) 
+x= np.log(a[:-(sum(np.isnan(a[:,11]))),0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)     
-y100= np.exp(m*np.log(a[-1,0] )+b)
+y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
 
-plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+y = np.log(a[:-(sum(np.isnan(a[:,9]))),9]) 
+x= np.log(a[:-(sum(np.isnan(a[:,9]))),0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,9]))),0] )+b)
+
+plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,9]))),0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
                
                
@@ -220,13 +235,25 @@ plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
 
-y = np.log(a[:,9]) 
+
+
+y = np.log(a[:,4]) 
 x= np.log(a[:,0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
 y100= np.exp(m*np.log(a[-1,0] )+b)
 
-plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='y',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+
+y = np.log(a[:,2]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
 y = np.log(a[:,6]) 
@@ -239,9 +266,7 @@ plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
 
-
-
-plt.xlim(xmax=max(a[:,0]))
+plt.xlim(xmax=max(a[:,0]+100))
 plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
 plt.xlabel('Size N',fontsize=15)
 plt.ylabel('Time in seconds',fontsize=15)
