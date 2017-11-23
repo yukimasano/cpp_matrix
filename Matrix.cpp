@@ -136,8 +136,6 @@ Matrix operator-(const Matrix& A, const Matrix& B)
 // definition of vector operator =
 Matrix& Matrix::operator=(const Matrix& A)
 {
-
-
   if (A.mShape[0] != mShape[0] || A.mShape[1] != mShape[1])
     {
       throw Exception("size mismatch",
@@ -151,7 +149,7 @@ Matrix& Matrix::operator=(const Matrix& A)
 	  			mData[i][j] = A.mData[i][j];
 	  		}
 	  }
-    }
+  }
   return *this;
 }
 
@@ -173,10 +171,11 @@ Matrix operator*(Matrix& A, Matrix& B){
 	assert(A.mShape[1] == B.mShape[0]);
 	Matrix C(A.mShape[0],B.mShape[1]);
 	//std::cout<<C<<std::endl;
+  Matrix AT = A.T();
 	for (int i=0; i<A.mShape[0];  i++){
 		for (int j=0; j<B.mShape[1]; j++){
 		//	C.mData[i][j] = s_prod(A.get_col(i+1), B.T().get_col(j+1), A.mShape[0]);
-			C.set_val(i+1,j+1 , (A.T().get_col(i+1) * B.get_col(j+1)));
+			C.set_val(i+1,j+1 , (AT.get_col(i+1) * B.get_col(j+1)));
 		}
 	}
 	return C;
@@ -184,11 +183,10 @@ Matrix operator*(Matrix& A, Matrix& B){
 
 Vector operator*(Matrix& A, Vector& b){
 	assert(nrows(A) == length(b));
-	int k= length(b);
+	int k = length(b);
 	Vector v(k);
 	for (int i=1; i<=k;  i++){
 		v.set_val(i, A.get_row(i)*b);
-
 	}
 	return v;
 }
@@ -249,41 +247,32 @@ std::ostream& operator<<(std::ostream& output, const Matrix& C) {
 Matrix diag(const Matrix& A){
 	Matrix C(A.mShape[0],A.mShape[1]);
 	for (int i=0; i<A.mShape[0];  i++){
-		for (int j=0; j<A.mShape[1]; j++){
-			if (i==j)
-				C.mData[i][j] = A.mData[i][j];
-		}
+		C.mData[i][i] = A.mData[i][i];
 	}
 	return C;
 }
 
 Vector Matrix::diag(){
+  Vector v(mShape[0]);
 	if (mShape[0] <= mShape[1]){
-		Vector v(mShape[0]);
 		for (int i=0; i<mShape[0];  i++){
-					for (int j=0; j<mShape[0]; j++){
-						if (i==j)
-							v.set_val( i+1 , mData[i][j]);
-					}
-				}
-		return v;
+			v.set_val( i+1 , mData[i][i]);
+		}
 	}
 	else {
 		Vector v(mShape[1]);
 		for (int i=0; i<mShape[1];  i++){
-			for (int j=0; j<mShape[1]; j++){
-				if (i==j)
-					v.set_val(i+1, mData[i][j]);
+				v.set_val(i+1, mData[i][i]);
 			}
 		}
-		return v;
-	}
+	return v;
 }
+
 
 void Matrix::set_val(int i, int j, double x){
 	mData[i-1][j-1] = x;
 }
-// 
+//
 // void Matrix::set_col(int i, Vector& x){
 // 	for (int k=0;k<mShape[0];k++){
 //     mData[k][i-1] = x(k);
@@ -294,7 +283,7 @@ Matrix diag(Vector& v){
 	int k =length(v);
 	Matrix C(k,k);
 	for (int i=1; i<=k; i++){
-		C(i,i)= v(i);
+		C.set_val(i,i, v(i));
 	}
 	return C;
 }
@@ -801,13 +790,12 @@ Matrix qr_q(Matrix& A){
     	}
 
     	for (int i = 0; i<m; i++){
-			for (int h = j; h<m; h++){
-				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
-			}
-		}
+  			for (int h = j; h<m; h++){
+  				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
+  			}
+		  }
     }
     return Q;
-
 }
 
 Vector SD(Matrix& A, Vector& v, int& count){

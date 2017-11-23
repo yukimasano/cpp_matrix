@@ -12,9 +12,9 @@ using namespace std;
 int main()
 {
 	ofstream outfile;
-
+	outfile.open("k_10.txt");
 	int i = 1;
-	for (int j=85; j<=110; j+=1){
+	for (int j=60; j<=110; j+=1){
 
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
 		// iters GaussSeidel| time GS | iters SOR(1.5) | time SOR(1.5) | ...
@@ -35,9 +35,9 @@ int main()
 		// A = A +Lambda;
 
 		////VERSION SAME KAPPA k0
-    i = pow(1.08,j)+8;
+    i = pow(1.09,j)+8;
 		outfile<<i<<",";
-    //
+
 	  double sd_co =0;
 		double sd_ti =0;
 		double cg_co =0;
@@ -58,24 +58,27 @@ int main()
 			x = randv(x);
 			Matrix Q(i,i);
 			Q = rand_basis_gs(Q);
+			cout<<"here"<<flush<<endl;
+			//Q = randm(Q);
+			//Q = qr_q(Q);
 			Matrix QT=Q.T();
+			Matrix A(i,i);
+			A = QT;
+
 			Vector d(i);
 			double k0 = 2.0;
 			for (double j=1; j<=i;  j++){
 				double x = ((k0-1)/float(i-1))*(j-1) + 1.;
-				d.set_val(int(j),x);
+				for (int h =1; h<=i; h++){
+					A.set_val(int(j),h,x);
+				}
 			}
-			Matrix Lambda(i,i);
-			Lambda = diag(d);
-			Matrix A(i,i);
-			A = QT * Lambda;
 			A = A*Q;
-
-			Matrix At(i,i);
-			At = A.T();
 			clock_t end = clock();
 			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 			cout<<"dim = "<<i<<" time for prep: "<<elapsed_secs<<endl;
+
+
 			////VERSION Diff  KAPPA same size
 			// cout<<i<<",";
 			// int mmm=50;
@@ -100,34 +103,7 @@ int main()
 			/////////////////////////////
 			Vector b = A*x;
 			int count = 0;
-			/////////////////////////////////////////////////////
-			//clock_t begin = clock();
-			//Vector x1 = Jacobi(A,b,count);
-			//clock_t end = clock();
-			//double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			//cout<<count<<",";
-			//cout<< elapsed_secs<< ",";
 
-
-			//begin = clock();
-			//x1 = SOR(A,b,1.0 , count);
-			//end = clock();
-			//elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			//cout<< count<< ","<< elapsed_secs << ",";
-
-			//begin = clock();
-			//count = 0;
-			//x1 = SOR(A,b,1.5 , count);
-		    //end = clock();
-		    //elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			//cout<< count<< ","<< elapsed_secs << ",";
-
-			//begin = clock();
-			//count = 0;
-			//x1 = SOR(A,b,0.5 , count);
-			//end = clock();
-			//elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			//cout<< count<< ","<< elapsed_secs << ",";
 	    //// code starts here /////////////////////////////////////
 			begin = clock();
 			count = 0;
@@ -189,7 +165,7 @@ int main()
 				qre_dx = 0;
 			}
 		}
-		outfile.open("same_kappa_new2.txt",ofstream::app);
+    cout<<"at the end"<<flush<<endl;
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
@@ -198,8 +174,9 @@ int main()
 		outfile<< qre_ti/10<<","<< qre_dx/10;
 		outfile<<endl;
 		outfile.flush();
-		outfile.close();
+
 	}
+	outfile.close();
   return 1;
 }
 

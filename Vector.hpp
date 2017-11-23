@@ -22,7 +22,7 @@ private:
    // member variables
    double* mData;   // data stored in vector
    int mSize;      // size of vector
-   friend class Matrix;
+   //friend class Matrix;
 public:
    // constructors
    // No default constructor
