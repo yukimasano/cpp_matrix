@@ -86,6 +86,7 @@ Vector QRsolve(Matrix& A, Vector& v);
 Vector QRsolve2(Matrix& A, Vector& v);
 Matrix randm(Matrix& A);
 Matrix qr_q(Matrix& A);
+Matrix rand_basis(Matrix& A);
 
 // graph functions
 Matrix er_graph(Matrix& A,float p);

@@ -12,7 +12,7 @@ using namespace std;
 int main()
 {
 	ofstream outfile;
-	outfile.open("same_kappa2_new.txt",ofstream::app);
+	outfile.open("same_kappa_new2.txt",ofstream::app);
 	int i = 1;
 	for (int j=28; j<=110; j+=1){
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
@@ -52,15 +52,14 @@ int main()
 
 		// for loop to average measurements
 	  for (int k=0;k<=10;k++){
+			clock_t begin = clock();
 			Vector x(i);
 			x = randv(x);
 			Matrix Q(i,i);
-			Q = randm(Q);
-			Q = qr_q(Q);
+			Q = rand_basis(Q);
 			Matrix QT=Q.T();
 			Vector d(i);
-
-			double k0 = 10.0;
+			double k0 = 2.0;
 			for (double j=1; j<=i;  j++){
 				double x = ((k0-1)/float(i-1))*(j-1) + 1.;
 				d.set_val(int(j),x);
@@ -73,9 +72,9 @@ int main()
 
 			Matrix At(i,i);
 			At = A.T();
-			Matrix AA(i,i);
-			AA = At*A;
-
+			clock_t end = clock();
+			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			cout<<"dim = "<<i<<" time for prep: "<<elapsed_secs<<endl;
 			////VERSION Diff  KAPPA same size
 			// cout<<i<<",";
 			// int mmm=50;
@@ -99,7 +98,6 @@ int main()
 			// A= A*Q;
 			/////////////////////////////
 			Vector b = A*x;
-			Vector b2 = At*b;
 			int count = 0;
 			/////////////////////////////////////////////////////
 			//clock_t begin = clock();
@@ -130,11 +128,11 @@ int main()
 			//elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 			//cout<< count<< ","<< elapsed_secs << ",";
 	    //// code starts here /////////////////////////////////////
-			clock_t begin = clock();
+			begin = clock();
 			count = 0;
 			Vector x1 = SD(A,b, count);
-			clock_t end = clock();
-			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			end = clock();
+			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
       sd_ti += elapsed_secs;
 			sd_co += count;
 
@@ -163,14 +161,19 @@ int main()
 			double delx = (x1 - x).norm();
 			lu_ti += elapsed_secs;
 			lu_dx += delx;
-
-		  begin = clock();
-			x1 = QRsolve2(A,b);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			delx = (x1 - x).norm();
-			qr_ti += elapsed_secs;
-			qr_dx += delx;
+			if (i<200){
+			  begin = clock();
+				x1 = QRsolve2(A,b);
+				end = clock();
+				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				delx = (x1 - x).norm();
+				qr_ti += elapsed_secs;
+				qr_dx += delx;
+			}
+			else{
+				qr_ti = 0;
+				qr_dx = 0;
+			}
       if (i<100){
 				begin = clock();
 				x1 = QRsolve(A,b);

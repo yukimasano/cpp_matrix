@@ -304,6 +304,7 @@ Matrix::Matrix(const Matrix& C){
 	}
 }
 
+
 Matrix randm(Matrix& A){
 	int m = nrows(A);
 	//srand( (unsigned)time( NULL ) );
@@ -313,6 +314,29 @@ Matrix randm(Matrix& A){
 		}
 	}
 	return A;
+}
+
+Matrix rand_basis(Matrix& A){
+  assert(nrows(A)==ncols(A));
+  int i = nrows(A);
+  A = randm(A);
+  Vector ve(i);
+  for (int k=1;k<=i; k++){
+    if (k==1){ve=A.get_col(k);}
+    else{
+      Vector vei = A.get_col(k);
+      ve = vei;
+      // do the Gram-Schmidt
+      for (int m=1; m<k;m++){
+        ve = ve - (A.get_col(m)*vei)* A.get_col(m);
+      }
+    }
+    ve = ve/ve.norm();
+    for (int j=1;j<=i; j++){
+      A.set_val(j,k, ve(j));
+    }
+  }
+return A;
 }
 
 Matrix er_graph(Matrix& A,float p){
