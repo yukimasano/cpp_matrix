@@ -85,7 +85,7 @@ Vector CG_pre(Matrix& A, Vector& v, int& count);
 
 Vector LUsolve(Matrix& A, Vector& v);
 Vector QRsolve(Matrix& A, Vector& v);
-Vector QRsolve2(Matrix& A, Vector& v);
+Vector QRsolve2( Matrix& A,  Vector& v);
 Matrix randm(Matrix& A);
 Matrix qr_q(Matrix& A);
 Matrix rand_basis_gs(Matrix& A);

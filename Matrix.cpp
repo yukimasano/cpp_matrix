@@ -4,7 +4,6 @@
 #include <cassert>
 #include <math.h>
 #include <stdlib.h>
-#define _USE_MATH_DEFINES
 // constructor that creates matrix of given size with
 // double precision entries all initially set to zero
 Matrix::Matrix(int rows, int cols)
@@ -514,7 +513,10 @@ Vector QRsolve(Matrix& A, Vector& v){
     	for (int i = 1; i<=m-j; i++){
     		len+=u(i,1)*u(i,1);
     	}
-    	u=u* (1./sqrt(len));
+      //std::cout<<j<<u<<std::endl<<std::flush;
+      if (len!=0){
+    	   u=u* (1./sqrt(len));
+      }
       //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
 
     	// SUBMULTIPLICATION    START /////////////////////////////
@@ -554,6 +556,7 @@ Vector QRsolve(Matrix& A, Vector& v){
 			for (int h = j; h<m; h++){
 				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
 			}
+      //std::cout<<j<<"end of for"<<std::endl<<std::flush;
 		}
 
     	// SUBMULTIPLICATION  END  ////////////////////////////
@@ -578,30 +581,37 @@ Vector QRsolve(Matrix& A, Vector& v){
     //	std::cout<< A*x -v <<std::endl;
 	return x;
 }
-Vector QRsolve2(Matrix& A, Vector& b){
+Vector QRsolve2(Matrix& A, Vector& bb){
 	assert(nrows(A) == ncols(A));
 	int m = ncols(A);
+  Vector b=bb;
 	Matrix V(m-1,m-1);
 	for (int k=0; k<m ;k++){
 		Vector xx(m-k);
+    //std::cout<<k<<xx<<std::flush<<std::endl;
 		for (int j=1;j<=m-k; j++){
 			xx.set_val(j, A(j+k,k+1));
 		}
 		//std::cout<<xx<<std::endl<<std::flush;
 		Vector vk(m-k);
+
 		double len =xx.norm();
 		vk.set_val(1,len);
+    //std::cout<<k<<vk<<std::endl<<std::flush;
+    //std::cout<<k<<xx.norm()<<std::endl<<std::flush;
+
 
 		vk = vk+ xx;
-		vk = vk / vk.norm();
-
+    if (vk.norm()!=0){
+		    vk = vk / vk.norm();
+    }
 		Matrix A_sub(m-k,m-k);
     	for (int i = k; i<m; i++){
     		for (int h = k; h<m; h++){
     			A_sub.set_val(i-k+1,h-k+1, A(i+1,h+1));
     		}
     	}
-    	//std::cout<<A<<std::endl<<std::flush;
+    //std::cout<<k<<A<<std::endl<<std::flush;
     	//std::cout<<A_sub<<std::endl<<std::flush;
 		Matrix vk2(m-k,1);
 		for (int jj=1 ; jj<=m-k;jj++){
@@ -651,6 +661,7 @@ Vector QRsolve2(Matrix& A, Vector& b){
 		}
 	return x;
 }
+
 Vector Jacobi(Matrix& A, Vector& v, int& count){
 	assert(nrows(A) == ncols(A));
 	int m =nrows(A);
@@ -757,7 +768,7 @@ Matrix qr_q(Matrix& A){
     	for (int i = 1; i<=m-j; i++){
     		len+=u(i,1)*u(i,1);
     	}
-    	u=u* (1./sqrt(len));
+      if (len!=0){u= (1./len)*u;}
       //   	std::cout<<"here comes  u " << std::endl<< j<<"  "<< u << std::endl<<std::flush;
 
     	// SUBMULTIPLICATION    START /////////////////////////////
@@ -788,7 +799,7 @@ Matrix qr_q(Matrix& A){
     			R.set_val(i+1,h+1, sub(i+1- j,h+1- j));
     		}
     	}
-
+      std::cout<<R<<std::flush<<std::endl;
     	for (int i = 0; i<m; i++){
   			for (int h = j; h<m; h++){
   				Q.set_val(i+1, h+1, subQ(i+1,h+1-j));
@@ -902,6 +913,7 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
 	Vector temp2(m);
 	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
 	while ((A*x -v).norm() > tol){
+    count+=1;
 		temp = A*r;
 		temp2 = A*p;
 		beta = r*temp2;
@@ -912,7 +924,7 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
     temp2 = A*p;
     anorm = p*temp2;
 		alpha = alpha/anorm;
-		count+=1;
+
 		x = x + alpha*p;
 		r = v - A*x;
 	}

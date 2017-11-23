@@ -179,7 +179,7 @@ os.chdir('/Users/yuki/Dropbox/!Dphil/5_ES/cpp_matrix')
 
 a=[]
 
-with open("same_kappa_new10.txt") as tsvfile:
+with open("k_10_normal.txt") as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
@@ -271,7 +271,7 @@ plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
 plt.xlabel('Size N',fontsize=15)
 plt.ylabel('Time in seconds',fontsize=15)
 plt.legend(loc='best', ncol=2,fontsize=11)
-fig.savefig('sameKappa10_time_new.pdf', dpi=500)
+fig.savefig('sameKappa2_normal_time_new.pdf', dpi=500)
 #%%
 a=[]
 with open("same_kappa2_new.txt") as tsvfile:

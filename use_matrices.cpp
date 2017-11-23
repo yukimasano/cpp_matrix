@@ -12,9 +12,9 @@ using namespace std;
 int main()
 {
 	ofstream outfile;
-	outfile.open("k_10.txt");
 	int i = 1;
-	for (int j=60; j<=110; j+=1){
+
+	for (int j=15; j<=110; j+=1){
 
 		// output is like |size of problem = condition number | iters Jacobi | time Jacobi | ...
 		// iters GaussSeidel| time GS | iters SOR(1.5) | time SOR(1.5) | ...
@@ -33,23 +33,23 @@ int main()
 		// Matrix Lambda(i,i);
 		// Lambda= diag(d);
 		// A = A +Lambda;
-
+		double sd_co =0.0;
+		double sd_ti =0.0;
+		double cg_co =0.0;
+		double cg_ti =0.0;
+		double cgp_co =0.0;
+		double cgp_ti =0.0;
+		double lu_ti =0.0;
+		double lu_dx =0.0;
+		double qr_ti =0.0;
+		double qr_dx =0.0;
+		double qre_ti =0.0;
+		double qre_dx =0.0;
 		////VERSION SAME KAPPA k0
     i = pow(1.09,j)+8;
 		outfile<<i<<",";
 
-	  double sd_co =0;
-		double sd_ti =0;
-		double cg_co =0;
-		double cg_ti =0;
-		double cgp_co =0;
-		double cgp_ti =0;
-		double lu_ti =0;
-		double lu_dx =0;
-		double qr_ti =0;
-		double qr_dx =0;
-		double qre_ti =0;
-		double qre_dx =0;
+
 
 		// for loop to average measurements
 	  for (int k=0;k<=10;k++){
@@ -58,22 +58,24 @@ int main()
 			x = randv(x);
 			Matrix Q(i,i);
 			Q = rand_basis_gs(Q);
-			cout<<"here"<<flush<<endl;
 			//Q = randm(Q);
 			//Q = qr_q(Q);
 			Matrix QT=Q.T();
 			Matrix A(i,i);
 			A = QT;
-
-			Vector d(i);
-			double k0 = 2.0;
-			for (double j=1; j<=i;  j++){
-				double x = ((k0-1)/float(i-1))*(j-1) + 1.;
+			double k0 = 10.0;
+			for (int jj=1; jj<=i;  jj++){
+				double x = ((k0-1)/float(i-1))*float(jj) + 1.;
 				for (int h =1; h<=i; h++){
-					A.set_val(int(j),h,x);
+					A.set_val(jj,h, A(jj,h)*x);
 				}
 			}
 			A = A*Q;
+			Vector b = A*x;
+			//Matrix AT = A.T();
+			//Matrix AA = AT*A;
+			//Vector b2 = AT*b;
+
 			clock_t end = clock();
 			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 			cout<<"dim = "<<i<<" time for prep: "<<elapsed_secs<<endl;
@@ -101,7 +103,6 @@ int main()
 			// A= QT * Lambda;
 			// A= A*Q;
 			/////////////////////////////
-			Vector b = A*x;
 			int count = 0;
 
 	    //// code starts here /////////////////////////////////////
@@ -138,7 +139,9 @@ int main()
 			double delx = (x1 - x).norm();
 			lu_ti += elapsed_secs;
 			lu_dx += delx;
+
 			if (i<200){
+				//cout<<"QR2"<<flush<<endl;
 			  begin = clock();
 				x1 = QRsolve2(A,b);
 				end = clock();
@@ -151,6 +154,7 @@ int main()
 				qr_ti = 0;
 				qr_dx = 0;
 			}
+			//cout<<"QRs"<<flush<<endl;
       if (i<100){
 				begin = clock();
 				x1 = QRsolve(A,b);
@@ -165,7 +169,8 @@ int main()
 				qre_dx = 0;
 			}
 		}
-    cout<<"at the end"<<flush<<endl;
+		//cout<<"done"<<flush<<endl;
+		outfile.open("k_10.txt", fstream::app);
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
@@ -174,9 +179,9 @@ int main()
 		outfile<< qre_ti/10<<","<< qre_dx/10;
 		outfile<<endl;
 		outfile.flush();
-
+		outfile.close();
 	}
-	outfile.close();
+
   return 1;
 }
 
