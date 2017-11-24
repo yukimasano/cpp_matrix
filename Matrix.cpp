@@ -225,7 +225,6 @@ Matrix operator*(const double& a, const Matrix& A)
 	return C;
 }
 
-
 std::ostream& operator<<(std::ostream& output, const Matrix& C) {
   for (int i=0; i<C.mShape[0]; i++)
     {

@@ -1,0 +1,390 @@
+==38357== Memcheck, a memory error detector
+==38357== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==38357== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==38357== Command: ./use_matrices
+==38357== Parent PID: 32753
+==38357== 
+--38357-- 
+--38357-- Valgrind options:
+--38357--    --leak-check=full
+--38357--    --log-file=valgrind_test.txt
+--38357--    -v
+--38357-- Output from sysctl({CTL_KERN,KERN_VERSION}):
+--38357--   Darwin Kernel Version 16.7.0: Wed Oct  4 00:17:00 PDT 2017; root:xnu-3789.71.6~1/RELEASE_X86_64
+--38357-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-avx-avx2-bmi
+--38357-- Page sizes: currently 4096, max supported 4096
+--38357-- Valgrind library directory: /usr/local/Cellar/valgrind/3.13.0/lib/valgrind
+--38357-- ./use_matrices (rx at 0x100000000, rw at 0x100013000)
+--38357--    reading syms   from primary file (84 116)
+--38357--    dSYM= ./use_matrices.dSYM/Contents/Resources/DWARF/use_matrices
+--38357--    reading dwarf3 from dsyms file
+--38357-- /usr/lib/dyld (rx at 0x100019000, rw at 0x100057000)
+--38357--    reading syms   from primary file (6 1223)
+--38357-- Scheduler: using generic scheduler lock implementation.
+--38357-- Reading suppressions file: /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp
+==38357== embedded gdbserver: reading from /var/folders/22/mmdyf68n3xqfzl34lfpvhlwr0000gp/T//vgdb-pipe-from-vgdb-to-38357-by-yuki-on-???
+==38357== embedded gdbserver: writing to   /var/folders/22/mmdyf68n3xqfzl34lfpvhlwr0000gp/T//vgdb-pipe-to-vgdb-from-38357-by-yuki-on-???
+==38357== embedded gdbserver: shared mem   /var/folders/22/mmdyf68n3xqfzl34lfpvhlwr0000gp/T//vgdb-pipe-shared-mem-vgdb-38357-by-yuki-on-???
+==38357== 
+==38357== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==38357== don't want to do, unless you know exactly what you're doing,
+==38357== or are doing some strange experiment):
+==38357==   /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/../../bin/vgdb --pid=38357 ...command...
+==38357== 
+==38357== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==38357==   /path/to/gdb ./use_matrices
+==38357== and then give GDB the following command
+==38357==   target remote | /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/../../bin/vgdb --pid=38357
+==38357== --pid is optional if only one valgrind process is running
+==38357== 
+--38357-- REDIR: 0x10003f620 (dyld:strcmp) redirected to 0x25805bbee (???)
+--38357-- REDIR: 0x100039130 (dyld:arc4random) redirected to 0x25805bc8c (???)
+--38357-- REDIR: 0x100038fe0 (dyld:strlen) redirected to 0x25805bbbd (???)
+--38357-- REDIR: 0x100038f40 (dyld:strcpy) redirected to 0x25805bc0a (???)
+--38357-- REDIR: 0x10003c7dd (dyld:strcat) redirected to 0x25805bbce (???)
+--38357-- REDIR: 0x10003c81b (dyld:strlcat) redirected to 0x25805bc27 (???)
+--38357-- /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_core-amd64-darwin.so (rx at 0x1000a4000, rw at 0x1000a9000)
+--38357--    reading syms   from primary file (3 73)
+--38357--    dSYM= /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_core-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_core-amd64-darwin.so
+--38357-- /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so (rx at 0x1000ad000, rw at 0x1000b5000)
+--38357--    reading syms   from primary file (72 81)
+--38357--    dSYM= /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so.dSYM/Contents/Resources/DWARF/vgpreload_memcheck-amd64-darwin.so
+--38357-- /usr/lib/libc++.1.dylib (rx at 0x1000bb000, rw at 0x100112000)
+--38357--    reading syms   from primary file (1979 1610)
+--38357-- /usr/lib/libSystem.B.dylib (rx at 0x10016f000, rw at 0x100171000)
+--38357--    reading syms   from primary file (31 5)
+--38357-- /usr/lib/libc++abi.dylib (rx at 0x100176000, rw at 0x1001a0000)
+--38357--    reading syms   from primary file (339 188)
+--38357-- /usr/lib/system/libcache.dylib (rx at 0x1001af000, rw at 0x1001b4000)
+--38357--    reading syms   from primary file (32 29)
+--38357-- /usr/lib/system/libcommonCrypto.dylib (rx at 0x1001b9000, rw at 0x1001c4000)
+--38357--    reading syms   from primary file (214 167)
+--38357-- /usr/lib/system/libcompiler_rt.dylib (rx at 0x1001d1000, rw at 0x1001d9000)
+--38357--    reading syms   from primary file (510 8)
+--38357-- /usr/lib/system/libcopyfile.dylib (rx at 0x1001e6000, rw at 0x1001ef000)
+--38357--    reading syms   from primary file (13 35)
+--38357-- /usr/lib/system/libcorecrypto.dylib (rx at 0x1001f5000, rw at 0x100279000)
+--38357--    reading syms   from primary file (479 678)
+--38357-- /usr/lib/system/libdispatch.dylib (rx at 0x100294000, rw at 0x1002c6000)
+--38357--    reading syms   from primary file (258 910)
+--38357-- /usr/lib/system/libdyld.dylib (rx at 0x1002ff000, rw at 0x100305000)
+--38357--    reading syms   from primary file (98 130)
+--38357-- /usr/lib/system/libkeymgr.dylib (rx at 0x10030d000, rw at 0x10030e000)
+--38357--    reading syms   from primary file (12 3)
+--38357-- /usr/lib/system/liblaunch.dylib (rx at 0x100312000, rw at 0x100313000)
+--38357--    reading syms   from primary file (113 3)
+--38357-- /usr/lib/system/libmacho.dylib (rx at 0x10031a000, rw at 0x100320000)
+--38357--    reading syms   from primary file (102 1)
+--38357-- /usr/lib/system/libquarantine.dylib (rx at 0x100326000, rw at 0x100329000)
+--38357--    reading syms   from primary file (67 32)
+--38357-- /usr/lib/system/libremovefile.dylib (rx at 0x10032f000, rw at 0x100331000)
+--38357--    reading syms   from primary file (15 4)
+--38357-- /usr/lib/system/libsystem_asl.dylib (rx at 0x100336000, rw at 0x10034f000)
+--38357--    reading syms   from primary file (222 224)
+--38357-- /usr/lib/system/libsystem_blocks.dylib (rx at 0x10035c000, rw at 0x10035d000)
+--38357--    reading syms   from primary file (21 6)
+--38357-- /usr/lib/system/libsystem_c.dylib (rx at 0x100361000, rw at 0x1003ef000)
+--38357--    reading syms   from primary file (1331 777)
+--38357-- /usr/lib/system/libsystem_configuration.dylib (rx at 0x100416000, rw at 0x10041a000)
+--38357--    reading syms   from primary file (38 75)
+--38357-- /usr/lib/system/libsystem_coreservices.dylib (rx at 0x100421000, rw at 0x100425000)
+--38357--    reading syms   from primary file (14 36)
+--38357-- /usr/lib/system/libsystem_coretls.dylib (rx at 0x10042a000, rw at 0x100443000)
+--38357--    reading syms   from primary file (130 250)
+--38357-- /usr/lib/system/libsystem_dnssd.dylib (rx at 0x10044e000, rw at 0x100455000)
+--38357--    reading syms   from primary file (49 24)
+--38357-- /usr/lib/system/libsystem_info.dylib (rx at 0x10045a000, rw at 0x100484000)
+--38357--    reading syms   from primary file (523 519)
+--38357-- /usr/lib/system/libsystem_kernel.dylib (rx at 0x100499000, rw at 0x1004bc000)
+--38357--    reading syms   from primary file (1179 98)
+--38357-- /usr/lib/system/libsystem_m.dylib (rx at 0x1004d3000, rw at 0x10051b000)
+--38357--    reading syms   from primary file (605 1)
+--38357-- /usr/lib/system/libsystem_malloc.dylib (rx at 0x100527000, rw at 0x100546000)
+--38357--    reading syms   from primary file (117 253)
+--38357-- /usr/lib/system/libsystem_network.dylib (rx at 0x100552000, rw at 0x1005ac000)
+--38357--    reading syms   from primary file (730 584)
+--38357-- /usr/lib/system/libsystem_networkextension.dylib (rx at 0x1005ce000, rw at 0x1005d8000)
+--38357--    reading syms   from primary file (89 229)
+--38357-- /usr/lib/system/libsystem_notify.dylib (rx at 0x1005e3000, rw at 0x1005ed000)
+--38357--    reading syms   from primary file (113 54)
+--38357-- /usr/lib/system/libsystem_platform.dylib (rx at 0x1005f4000, rw at 0x1005fd000)
+--38357--    reading syms   from primary file (158 105)
+--38357-- /usr/lib/system/libsystem_pthread.dylib (rx at 0x100605000, rw at 0x100610000)
+--38357--    reading syms   from primary file (174 79)
+--38357-- /usr/lib/system/libsystem_sandbox.dylib (rx at 0x10061c000, rw at 0x100620000)
+--38357--    reading syms   from primary file (85 9)
+--38357-- /usr/lib/system/libsystem_secinit.dylib (rx at 0x100626000, rw at 0x100628000)
+--38357--    reading syms   from primary file (1 7)
+--38357-- /usr/lib/system/libsystem_symptoms.dylib (rx at 0x10062d000, rw at 0x100635000)
+--38357--    reading syms   from primary file (8 66)
+--38357-- /usr/lib/system/libsystem_trace.dylib (rx at 0x10063b000, rw at 0x10064f000)
+--38357--    reading syms   from primary file (101 236)
+--38357-- /usr/lib/system/libunwind.dylib (rx at 0x10065d000, rw at 0x100663000)
+--38357--    reading syms   from primary file (102 52)
+--38357-- /usr/lib/system/libxpc.dylib (rx at 0x10066a000, rw at 0x100694000)
+--38357--    reading syms   from primary file (515 825)
+--38357-- /usr/lib/libobjc.A.dylib (rx at 0x1006b3000, rw at 0x100a86000)
+--38357--    reading syms   from primary file (368 886)
+--38357-- REDIR: 0x1005f5680 (libsystem_platform.dylib:_platform_memchr$VARIANT$Haswell) redirected to 0x1000b0131 (_platform_memchr$VARIANT$Haswell)
+--38357-- REDIR: 0x1005f5760 (libsystem_platform.dylib:_platform_memcmp) redirected to 0x1000b069a (_platform_memcmp)
+--38357-- REDIR: 0x1005f5cc0 (libsystem_platform.dylib:_platform_strncmp) redirected to 0x1000b002d (_platform_strncmp)
+--38357-- REDIR: 0x100362b40 (libsystem_c.dylib:strlen) redirected to 0x1000afcd6 (strlen)
+--38357-- REDIR: 0x1005f6280 (libsystem_platform.dylib:_platform_strcmp) redirected to 0x1000b00ae (_platform_strcmp)
+--38357-- REDIR: 0x10052bd61 (libsystem_malloc.dylib:calloc) redirected to 0x1000aebbf (calloc)
+--38357-- REDIR: 0x10052b3dc (libsystem_malloc.dylib:malloc_default_zone) redirected to 0x1000af901 (malloc_default_zone)
+--38357-- REDIR: 0x100529217 (libsystem_malloc.dylib:malloc_zone_malloc) redirected to 0x1000ae80b (malloc_zone_malloc)
+--38357-- REDIR: 0x10052b3e7 (libsystem_malloc.dylib:malloc_zone_calloc) redirected to 0x1000aedad (malloc_zone_calloc)
+--38357-- REDIR: 0x1005281e8 (libsystem_malloc.dylib:malloc) redirected to 0x1000ae5a0 (malloc)
+--38357-- REDIR: 0x10052b4af (libsystem_malloc.dylib:malloc_zone_from_ptr) redirected to 0x1000af942 (malloc_zone_from_ptr)
+--38357-- REDIR: 0x10052add5 (libsystem_malloc.dylib:free) redirected to 0x1000ae981 (free)
+--38357-- REDIR: 0x1005f5ea0 (libsystem_platform.dylib:_platform_strchr$VARIANT$Haswell) redirected to 0x1000afba6 (_platform_strchr$VARIANT$Haswell)
+==38357== Syscall param msg->desc.port.name points to uninitialised byte(s)
+==38357==    at 0x1004AB34A: mach_msg_trap (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x1004AA796: mach_msg (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x1004A4485: task_set_special_port (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x10064010E: _os_trace_create_debug_control_port (in /usr/lib/system/libsystem_trace.dylib)
+==38357==    by 0x100640458: _libtrace_init (in /usr/lib/system/libsystem_trace.dylib)
+==38357==    by 0x1001709DF: libSystem_initializer (in /usr/lib/libSystem.B.dylib)
+==38357==    by 0x10002EA1A: ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357==    by 0x10002EC1D: ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357==    by 0x10002A4A9: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x10002A440: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x100029523: ImageLoader::processInitializers(ImageLoader::LinkContext const&, unsigned int, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x1000295B8: ImageLoader::runInitializers(ImageLoader::LinkContext const&, ImageLoader::InitializerTimingList&) (in /usr/lib/dyld)
+==38357==  Address 0x1048a1d6c is on thread 1's stack
+==38357==  in frame #2, created by task_set_special_port (???:)
+==38357== 
+--38357-- REDIR: 0x10052bf10 (libsystem_malloc.dylib:realloc) redirected to 0x1000aef41 (realloc)
+==38357== 
+==38357== HEAP SUMMARY:
+==38357==     in use at exit: 3,162,378 bytes in 57,410 blocks
+==38357==   total heap usage: 984,902 allocs, 927,492 frees, 57,294,570 bytes allocated
+==38357== 
+==38357== Searching for pointers to 57,410 not-freed blocks
+==38357== Checked 9,661,832 bytes
+==38357== 
+==38357== 64 bytes in 1 blocks are definitely lost in loss record 25 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B7BA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B62D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B4A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10029568D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==38357== 
+==38357== 64 bytes in 1 blocks are definitely lost in loss record 26 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B7BA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B62D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B4A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357== 
+==38357== 72 bytes in 3 blocks are possibly lost in loss record 27 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B4846: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10029568D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==38357==    by 0x10029563A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==38357==    by 0x1001709D5: libSystem_initializer (in /usr/lib/libSystem.B.dylib)
+==38357==    by 0x10002EA1A: ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357==    by 0x10002EC1D: ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357== 
+==38357== 148 (80 direct, 68 indirect) bytes in 1 blocks are definitely lost in loss record 29 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1003822EB: __Balloc_D2A (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x100382C85: __d2b_D2A (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x10037F405: __dtoa (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1003A83DD: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1003D1422: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1003B5929: _vsnprintf (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1003B597C: vsnprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1003A5E1C: snprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==38357==    by 0x1000D8DF0: std::__1::num_put<char, std::__1::ostreambuf_iterator<char, std::__1::char_traits<char> > >::do_put(std::__1::ostreambuf_iterator<char, std::__1::char_traits<char> >, std::__1::ios_base&, char, double) const (in /usr/lib/libc++.1.dylib)
+==38357==    by 0x1000CC9CB: std::__1::basic_ostream<char, std::__1::char_traits<char> >::operator<<(double) (in /usr/lib/libc++.1.dylib)
+==38357==    by 0x1000013E8: main (in ./use_matrices)
+==38357== 
+==38357== 192 bytes in 3 blocks are definitely lost in loss record 32 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B7BA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B62D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B4A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10029568D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==38357==    by 0x10029563A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==38357== 
+==38357== 192 bytes in 3 blocks are definitely lost in loss record 33 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B7BA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B62D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B4A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10029568D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==38357== 
+==38357== 2,944 bytes in 46 blocks are definitely lost in loss record 44 of 63
+==38357==    at 0x1000AEC7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x1006B7BA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B7C6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B62D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006B4A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x1006C7FE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10001E03B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==38357==    by 0x10001E255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==38357==    by 0x10030200A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==38357==    by 0x1006B4074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==38357==    by 0x10029568D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==38357==    by 0x10029563A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==38357== 
+==38357== 41,360 bytes in 5,170 blocks are definitely lost in loss record 48 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100003FFB: operator+(Matrix const&, Matrix const&) (in ./use_matrices)
+==38357==    by 0x100007652: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== 76,384 bytes in 792 blocks are definitely lost in loss record 49 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x10000378E: Matrix::Matrix(int, int) (in ./use_matrices)
+==38357==    by 0x10000126B: main (in ./use_matrices)
+==38357== 
+==38357== 76,384 bytes in 792 blocks are definitely lost in loss record 50 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x1000048D7: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==38357==    by 0x100005F15: rand_basis_gs(Matrix&) (in ./use_matrices)
+==38357==    by 0x10000127D: main (in ./use_matrices)
+==38357== 
+==38357== 76,384 bytes in 792 blocks are definitely lost in loss record 51 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x10000378E: Matrix::Matrix(int, int) (in ./use_matrices)
+==38357==    by 0x1000012AD: main (in ./use_matrices)
+==38357== 
+==38357== 76,384 bytes in 792 blocks are definitely lost in loss record 52 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x1000048D7: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==38357==    by 0x1000012BC: main (in ./use_matrices)
+==38357== 
+==38357== 82,720 (41,360 direct, 41,360 indirect) bytes in 792 blocks are definitely lost in loss record 53 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100003E64: operator+(Matrix const&, Matrix const&) (in ./use_matrices)
+==38357==    by 0x100007652: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== 347,600 bytes in 5,170 blocks are definitely lost in loss record 57 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100004DC7: operator*(Matrix&, Matrix&) (in ./use_matrices)
+==38357==    by 0x100008AC7: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000162B: main (in ./use_matrices)
+==38357== 
+==38357== 347,600 bytes in 5,170 blocks are definitely lost in loss record 58 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x1000048D7: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==38357==    by 0x100008AF9: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000162B: main (in ./use_matrices)
+==38357== 
+==38357== 347,600 bytes in 5,170 blocks are definitely lost in loss record 59 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x1000077DE: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== 388,960 (41,360 direct, 347,600 indirect) bytes in 792 blocks are definitely lost in loss record 60 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100004484: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==38357==    by 0x100008B4A: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000162B: main (in ./use_matrices)
+==38357== 
+==38357== 388,960 (41,360 direct, 347,600 indirect) bytes in 792 blocks are definitely lost in loss record 61 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100004484: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==38357==    by 0x10000799C: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== 388,960 (41,360 direct, 347,600 indirect) bytes in 792 blocks are definitely lost in loss record 62 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x100004484: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==38357==    by 0x100007AD0: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== 500,720 bytes in 9,548 blocks are definitely lost in loss record 63 of 63
+==38357==    at 0x1000AE616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==38357==    by 0x100198E0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==38357==    by 0x10000784E: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==38357==    by 0x10000170A: main (in ./use_matrices)
+==38357== 
+==38357== LEAK SUMMARY:
+==38357==    definitely lost: 2,059,392 bytes in 36,619 blocks
+==38357==    indirectly lost: 1,084,228 bytes in 20,682 blocks
+==38357==      possibly lost: 72 bytes in 3 blocks
+==38357==    still reachable: 4,296 bytes in 7 blocks
+==38357==         suppressed: 14,390 bytes in 99 blocks
+==38357== Reachable blocks (those to which a pointer was found) are not shown.
+==38357== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==38357== 
+==38357== Use --track-origins=yes to see where uninitialised values come from
+==38357== ERROR SUMMARY: 21 errors from 21 contexts (suppressed: 13 from 13)
+==38357== 
+==38357== 1 errors in context 1 of 21:
+==38357== Syscall param msg->desc.port.name points to uninitialised byte(s)
+==38357==    at 0x1004AB34A: mach_msg_trap (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x1004AA796: mach_msg (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x1004A4485: task_set_special_port (in /usr/lib/system/libsystem_kernel.dylib)
+==38357==    by 0x10064010E: _os_trace_create_debug_control_port (in /usr/lib/system/libsystem_trace.dylib)
+==38357==    by 0x100640458: _libtrace_init (in /usr/lib/system/libsystem_trace.dylib)
+==38357==    by 0x1001709DF: libSystem_initializer (in /usr/lib/libSystem.B.dylib)
+==38357==    by 0x10002EA1A: ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357==    by 0x10002EC1D: ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==38357==    by 0x10002A4A9: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x10002A440: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x100029523: ImageLoader::processInitializers(ImageLoader::LinkContext const&, unsigned int, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==38357==    by 0x1000295B8: ImageLoader::runInitializers(ImageLoader::LinkContext const&, ImageLoader::InitializerTimingList&) (in /usr/lib/dyld)
+==38357==  Address 0x1048a1d6c is on thread 1's stack
+==38357==  in frame #2, created by task_set_special_port (???:)
+==38357== 
+--38357-- 
+--38357-- used_suppression:      5 OSX1012:19-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:924 suppressed: 8,792 bytes in 5 blocks
+--38357-- used_suppression:      4 OSX1012:8-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:819 suppressed: 4,600 bytes in 49 blocks
+--38357-- used_suppression:      4 OSX1012:20-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:934 suppressed: 1,180 bytes in 23 blocks
+--38357-- used_suppression:      4 OSX1012:17-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:906 suppressed: 352 bytes in 6 blocks
+--38357-- used_suppression:      9 OSX1012:10-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:839 suppressed: 526 bytes in 12 blocks
+--38357-- used_suppression:      4 OSX1012:18-Leak /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:915 suppressed: 120 bytes in 4 blocks
+--38357-- used_suppression:      1 OSX1012:dyld-5 /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:1283
+--38357-- used_suppression:      2 OSX1012:dyld-4 /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:1275
+--38357-- used_suppression:      1 OSX1012:dyld-3 /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/default.supp:1267
+==38357== 
+==38357== ERROR SUMMARY: 21 errors from 21 contexts (suppressed: 13 from 13)

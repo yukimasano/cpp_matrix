@@ -1,0 +1,224 @@
+==42223== Memcheck, a memory error detector
+==42223== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==42223== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==42223== Command: ./use_matrices
+==42223== Parent PID: 35415
+==42223== 
+==42223== Syscall param msg->desc.port.name points to uninitialised byte(s)
+==42223==    at 0x1004B034A: mach_msg_trap (in /usr/lib/system/libsystem_kernel.dylib)
+==42223==    by 0x1004AF796: mach_msg (in /usr/lib/system/libsystem_kernel.dylib)
+==42223==    by 0x1004A9485: task_set_special_port (in /usr/lib/system/libsystem_kernel.dylib)
+==42223==    by 0x10064510E: _os_trace_create_debug_control_port (in /usr/lib/system/libsystem_trace.dylib)
+==42223==    by 0x100645458: _libtrace_init (in /usr/lib/system/libsystem_trace.dylib)
+==42223==    by 0x1001759DF: libSystem_initializer (in /usr/lib/libSystem.B.dylib)
+==42223==    by 0x100033A1A: ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==42223==    by 0x100033C1D: ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==42223==    by 0x10002F4A9: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==42223==    by 0x10002F440: ImageLoader::recursiveInitialization(ImageLoader::LinkContext const&, unsigned int, char const*, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==42223==    by 0x10002E523: ImageLoader::processInitializers(ImageLoader::LinkContext const&, unsigned int, ImageLoader::InitializerTimingList&, ImageLoader::UninitedUpwards&) (in /usr/lib/dyld)
+==42223==    by 0x10002E5B8: ImageLoader::runInitializers(ImageLoader::LinkContext const&, ImageLoader::InitializerTimingList&) (in /usr/lib/dyld)
+==42223==  Address 0x1048a6d8c is on thread 1's stack
+==42223==  in frame #2, created by task_set_special_port (???:)
+==42223==  Uninitialised value was created by a stack allocation
+==42223==    at 0x1006450A6: _os_trace_create_debug_control_port (in /usr/lib/system/libsystem_trace.dylib)
+==42223== 
+==42223== 
+==42223== HEAP SUMMARY:
+==42223==     in use at exit: 137,242 bytes in 2,646 blocks
+==42223==   total heap usage: 33,186 allocs, 30,540 frees, 1,511,274 bytes allocated
+==42223== 
+==42223== 64 bytes in 1 blocks are definitely lost in loss record 25 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006BCBA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BB2D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006B9A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10029A68D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==42223== 
+==42223== 64 bytes in 1 blocks are definitely lost in loss record 26 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006BCBA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BB2D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006B9A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223== 
+==42223== 72 bytes in 3 blocks are possibly lost in loss record 27 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006B9846: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10029A68D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==42223==    by 0x10029A63A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==42223==    by 0x1001759D5: libSystem_initializer (in /usr/lib/libSystem.B.dylib)
+==42223==    by 0x100033A1A: ImageLoaderMachO::doModInitFunctions(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==42223==    by 0x100033C1D: ImageLoaderMachO::doInitialization(ImageLoader::LinkContext const&) (in /usr/lib/dyld)
+==42223== 
+==42223== 148 (80 direct, 68 indirect) bytes in 1 blocks are definitely lost in loss record 29 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1003872EB: __Balloc_D2A (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x100387C85: __d2b_D2A (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x100384405: __dtoa (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1003AD3DD: __vfprintf (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1003D6422: __v2printf (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1003BA929: _vsnprintf (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1003BA97C: vsnprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1003AAE1C: snprintf_l (in /usr/lib/system/libsystem_c.dylib)
+==42223==    by 0x1000DDDF0: std::__1::num_put<char, std::__1::ostreambuf_iterator<char, std::__1::char_traits<char> > >::do_put(std::__1::ostreambuf_iterator<char, std::__1::char_traits<char> >, std::__1::ios_base&, char, double) const (in /usr/lib/libc++.1.dylib)
+==42223==    by 0x1000D19CB: std::__1::basic_ostream<char, std::__1::char_traits<char> >::operator<<(double) (in /usr/lib/libc++.1.dylib)
+==42223==    by 0x10000154B: main (use_matrices.cpp:81)
+==42223== 
+==42223== 192 bytes in 3 blocks are definitely lost in loss record 32 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006BCBA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BB2D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006B9A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10029A68D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==42223==    by 0x10029A63A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==42223== 
+==42223== 192 bytes in 3 blocks are definitely lost in loss record 33 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006BCBA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC4D: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BB2D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006B9A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10029A68D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==42223== 
+==42223== 1,760 bytes in 220 blocks are definitely lost in loss record 42 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x10000756B: operator+(Matrix const&, Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000ABC2: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== 2,944 bytes in 46 blocks are definitely lost in loss record 46 of 63
+==42223==    at 0x1000B3C7A: calloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x1006BCBA0: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BCC6E: realizeClass(objc_class*) (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006BB2D1: _read_images (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006B9A29: map_images_nolock (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x1006CCFE8: objc_object::sidetable_retainCount() (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10002303B: dyld::notifyBatchPartial(dyld_image_states, bool, char const* (*)(dyld_image_states, unsigned int, dyld_image_info const*), bool, bool) (in /usr/lib/dyld)
+==42223==    by 0x100023255: dyld::registerObjCNotifiers(void (*)(unsigned int, char const* const*, mach_header const* const*), void (*)(char const*, mach_header const*), void (*)(char const*, mach_header const*)) (in /usr/lib/dyld)
+==42223==    by 0x10030700A: _dyld_objc_notify_register (in /usr/lib/system/libdyld.dylib)
+==42223==    by 0x1006B9074: _objc_init (in /usr/lib/libobjc.A.dylib)
+==42223==    by 0x10029A68D: _os_object_init (in /usr/lib/system/libdispatch.dylib)
+==42223==    by 0x10029A63A: libdispatch_init (in /usr/lib/system/libdispatch.dylib)
+==42223== 
+==42223== 3,200 bytes in 40 blocks are definitely lost in loss record 47 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100006CFE: Matrix::Matrix(int, int) (in ./use_matrices)
+==42223==    by 0x100001195: main (use_matrices.cpp:59)
+==42223== 
+==42223== 3,200 bytes in 40 blocks are definitely lost in loss record 48 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100007E47: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==42223==    by 0x100009485: rand_basis_gs(Matrix&) (in ./use_matrices)
+==42223==    by 0x1000011AD: main (use_matrices.cpp:60)
+==42223== 
+==42223== 3,200 bytes in 40 blocks are definitely lost in loss record 49 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100006CFE: Matrix::Matrix(int, int) (in ./use_matrices)
+==42223==    by 0x100001210: main (use_matrices.cpp:64)
+==42223== 
+==42223== 3,200 bytes in 40 blocks are definitely lost in loss record 50 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100007E47: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==42223==    by 0x100001228: main (use_matrices.cpp:65)
+==42223== 
+==42223== 3,520 (1,760 direct, 1,760 indirect) bytes in 40 blocks are definitely lost in loss record 51 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x1000073D4: operator+(Matrix const&, Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000ABC2: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== 12,320 bytes in 220 blocks are definitely lost in loss record 57 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100008337: operator*(Matrix&, Matrix&) (in ./use_matrices)
+==42223==    by 0x10000C037: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001A68: main (use_matrices.cpp:146)
+==42223== 
+==42223== 12,320 bytes in 220 blocks are definitely lost in loss record 58 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x100007E47: Matrix::operator=(Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000C069: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001A68: main (use_matrices.cpp:146)
+==42223== 
+==42223== 12,320 bytes in 220 blocks are definitely lost in loss record 59 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x10000AD4E: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== 14,080 (1,760 direct, 12,320 indirect) bytes in 40 blocks are definitely lost in loss record 60 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x1000079F4: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000C0BA: QRsolve2(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001A68: main (use_matrices.cpp:146)
+==42223== 
+==42223== 14,080 (1,760 direct, 12,320 indirect) bytes in 40 blocks are definitely lost in loss record 61 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x1000079F4: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000AF0C: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== 14,080 (1,760 direct, 12,320 indirect) bytes in 40 blocks are definitely lost in loss record 62 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x1000079F4: operator-(Matrix const&, Matrix const&) (in ./use_matrices)
+==42223==    by 0x10000B040: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== 17,600 bytes in 400 blocks are definitely lost in loss record 63 of 63
+==42223==    at 0x1000B3616: malloc (in /usr/local/Cellar/valgrind/3.13.0/lib/valgrind/vgpreload_memcheck-amd64-darwin.so)
+==42223==    by 0x10019DE0D: operator new(unsigned long) (in /usr/lib/libc++abi.dylib)
+==42223==    by 0x10000ADBE: QRsolve(Matrix&, Vector&) (in ./use_matrices)
+==42223==    by 0x100001D18: main (use_matrices.cpp:160)
+==42223== 
+==42223== LEAK SUMMARY:
+==42223==    definitely lost: 79,696 bytes in 1,655 blocks
+==42223==    indirectly lost: 38,788 bytes in 882 blocks
+==42223==      possibly lost: 72 bytes in 3 blocks
+==42223==    still reachable: 4,296 bytes in 7 blocks
+==42223==         suppressed: 14,390 bytes in 99 blocks
+==42223== Reachable blocks (those to which a pointer was found) are not shown.
+==42223== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==42223== 
+==42223== For counts of detected and suppressed errors, rerun with: -v
+==42223== ERROR SUMMARY: 21 errors from 21 contexts (suppressed: 13 from 13)

@@ -52,25 +52,26 @@ int main()
 
 
 		// for loop to average measurements
-	  for (int k=0;k<=10;k++){
+	  for (int k=0;k<=10 ;k++){
 			clock_t begin = clock();
 			Vector x(i);
 			x = randv(x);
 			Matrix Q(i,i);
 			Q = rand_basis_gs(Q);
+			Q2 = rand_basis_gs(Q);
 			//Q = randm(Q);
 			//Q = qr_q(Q);
-			Matrix QT=Q.T();
+			//Matrix QT=Q.T();
 			Matrix A(i,i);
-			A = QT;
-			double k0 = 10.0;
+			A = Q;
+			double k0 = 2.0;
 			for (int jj=1; jj<=i;  jj++){
 				double x = ((k0-1)/float(i-1))*float(jj) + 1.;
 				for (int h =1; h<=i; h++){
 					A.set_val(jj,h, A(jj,h)*x);
 				}
 			}
-			A = A*Q;
+			A = A*Q2;
 			Vector b = A*x;
 			//Matrix AT = A.T();
 			//Matrix AA = AT*A;
@@ -170,7 +171,7 @@ int main()
 			}
 		}
 		//cout<<"done"<<flush<<endl;
-		outfile.open("k_10.txt", fstream::app);
+		outfile.open("new_kappa2.txt", fstream::app);
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
