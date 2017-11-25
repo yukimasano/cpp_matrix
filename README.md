@@ -1,4 +1,4 @@
-# cpp_matrix: A C++ implementation of a matrix class and linear solvers 
+# cpp_matrix: C++ implementation of a matrix class and linear solvers 
 (For code description see bottom)
 
 This project's purpose was to analyze the different scaling patterns of commonly used Linear solvers.
