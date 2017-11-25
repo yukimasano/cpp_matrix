@@ -33,7 +33,7 @@ Steps for generating SRDD matrices with  size `N` and approximately `κ = 2N`
  1. Generate random matrix A of size `NxN`
  2. Set diagonal entries of A to linspace(N,...,2N)
  3. Generate random vector `x` and let `b = Ax`.
-By (Gershogorin discs)[https://en.wikipedia.org/wiki/Gershgorin_circle_theorem] the matrix has approximately the eigenvalues (N,...,2N) and thus `κ = 2`.
+By [Gershogorin discs](https://en.wikipedia.org/wiki/Gershgorin_circle_theorem) the matrix has approximately the eigenvalues (N,...,2N) and thus `κ = 2`.
 
 ## Same condition number `κ`, varying size `N`, non-symmetric A
 
@@ -55,5 +55,11 @@ In the above figure we use the normal system for the CG solvers.
 # Critical remarks
  * Definitely easier to implement in Matlab, Python..
  * Matrices were too easy for my solvers in some cases by construction (CG with pre-conditioning converges in 1-step for `A = QDQ'`)
- * Writing everything in C++ was instructive but one should really use proper templates like (Eigen)[http://eigen.tuxfamily.org/index.php?title=Main_Page]
+ * Writing everything in C++ was instructive but one should really use proper templates like [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+ 
 # Code
+ * `vary_N.cpp`: implements the above procedure for symmetric A system with 10 iterations at every size. Sizes grow exponentially.
+ * `vary_kappa.cpp`: same as vary_N except that now we vary `κ` at every iteration and keep `N = 100`
+ * `SRDD.cpp`: Generates SRDD matrix as above and solves it, also 10 iterations at every size that grows exponentially. 
+ * `Matrix.cpp`: Includes the matrix class and all methods and the solvers
+ * `Vector.cpp`: A vector class, as from introductory C++ course of [Joe Pit-Francis](https://www.cs.ox.ac.uk/people/joe.pitt-francis/)
