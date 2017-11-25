@@ -25,9 +25,11 @@ LU, QR, SD, CG, Sucessive-overrelaxation (includes Jacobi and Gauss-Seidel)
 # Results
 
 ## Same condition number κ, varying size N, non-symmetric A
+<img src="https://user-images.githubusercontent.com/29401818/33230601-6e5347b2-d1de-11e7-93c8-a0e591901fda.png" height ="300">
 
 ## Same condition number κ, varying size N, symmetric A
-
+<img src="https://user-images.githubusercontent.com/29401818/33230603-6e914bf2-d1de-11e7-9e83-02dd4116353b.png" height ="300">
 ## Same size number N, condition number κ, symmetric A
-
+<img src=" " height ="300">
 ## SRDD with varying size N = κ, symmetric A
+<img src="https://user-images.githubusercontent.com/29401818/33230604-6ea3f6f8-d1de-11e7-8d5a-e957bf37a2f9.png" height ="300">
