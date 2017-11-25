@@ -18,7 +18,7 @@ LU, QR, SD, (if you take the squared system: CG)
 
 LU, QR, SD, CG.
 
-### Strictly-row/column-diagonally-dominant A
+### Strictly-row/column-diagonally-dominant (SRDD) A
 
 LU, QR, SD, CG, Sucessive-overrelaxation (includes Jacobi and Gauss-Seidel)
 
