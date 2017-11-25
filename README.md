@@ -6,7 +6,7 @@ The algorithms implemented here are: LU, QR (implicit and explicit), SD, CG, CG 
 
 # Linear Systems?
 
-Linear systems have the shape *Ax=b* with a known matrix A and known vector b. Essentially all we're trying to do is `x=A\b`, in Matlab notation. Note also that these solvers can be used for finding an x that minimizes *| Ax - b |*. This is done by solving the symmetric system *A'Ax = A'b* (note however that the condition number will be squared).
+Linear systems have the shape `Ax=b` with a known matrix A and known vector b. Essentially all we're trying to do is `x=A\b`, in Matlab notation. Note also that these solvers can be used for finding an x that minimizes `| Ax - b |`. This is done by solving the symmetric system *`A'Ax = A'b` (note however that the condition number will be squared).
 
 # Quick overview of when which solver can be used.
 
