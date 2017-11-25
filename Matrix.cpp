@@ -488,7 +488,7 @@ Vector QRsolve(Matrix& A, Vector& v){
 	// QR via Householder
 	assert(nrows(A) == ncols(A));
 	int m = ncols(A);
-	Matrix R= A;
+	Matrix R = A;
 	Vector temp=ones(m);
 	Matrix Q = diag(temp);
     for (int j = 0; j<m; j++){
@@ -583,6 +583,7 @@ Vector QRsolve(Matrix& A, Vector& v){
 Vector QRsolve2(Matrix& A, Vector& bb){
 	assert(nrows(A) == ncols(A));
 	int m = ncols(A);
+  Matrix A2 = A;
   Vector b=bb;
 	Matrix V(m-1,m-1);
 	for (int k=0; k<m ;k++){
@@ -628,7 +629,7 @@ Vector QRsolve2(Matrix& A, Vector& bb){
 
 		for (int j = k; j<m; j++){
 			for (int h=k; h<m; h++){
-				A.set_val(j+1,h+1,A_sub2(j+1-k, h+1-k) );
+				A2.set_val(j+1,h+1,A_sub2(j+1-k, h+1-k) );
 			}
 		}
 		Vector bk2(m-k);
@@ -654,9 +655,9 @@ Vector QRsolve2(Matrix& A, Vector& bb){
 	for (int k=m-1; k>=0; k--){
 		x.set_val(k+1, b(k+1));
 		for (int j = k+1; j<m; j++){
-			x.set_val(k+1, x(k+1)- A(k+1,j+1)*x(j+1));
+			x.set_val(k+1, x(k+1)- A2(k+1,j+1)*x(j+1));
 			}
-		x.set_val(k+1, x(k+1)/A(k+1,k+1));
+		x.set_val(k+1, x(k+1)/A2(k+1,k+1));
 		}
 	return x;
 }
@@ -667,20 +668,22 @@ Vector Jacobi(Matrix& A, Vector& v, int& count){
 	// we want a square system
 
 	// INITIALISATION
-	Matrix D=diag(A);
+	Matrix T=A;
 	for (int k=1; k<=m; k++){
-		D.set_val(k,k, (1./D(k,k)));
+		T.set_val(k,k, (1./A(k,k)));
 	}
 	Vector temp = ones(m);
 	Matrix eye = diag(temp);
-	Matrix T =  (eye - D*A);
-	Vector c = D*v;
+  Vector c = T*v;
+	T =  (eye - T);
 	double tol = 1.e-12;
 	Vector x=c;
 	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
-	while ((A*x -v).norm() > tol){
+  Vector r = (A*x -v);
+	while (r.norm() > tol){
 		count+=1;
-		x= T*x + c;
+		x = T*x + c;
+    r = (A*x -v);
 	//	std::cout<<(A*x -v).norm() << std::endl<<std::flush;
 	}
   //	std::cout<<count<<std::endl<<std::flush;
@@ -723,7 +726,8 @@ Vector SOR(Matrix& A, Vector& v, double w, int& count){
 	double tol = 1.e-12;
 	Vector x=c;
 	Vector rh(m);
-	while ((A*x -v).norm() >tol){
+  Vector r = c;
+	while (r.norm() >tol){
 		count+=1;
 		rh = M*x + c;
 		//std::cout<<x<<std::endl<<std::flush;
@@ -735,7 +739,7 @@ Vector SOR(Matrix& A, Vector& v, double w, int& count){
 			}
 			x.set_val(k+1, x(k+1)/LL(k+1,k+1));
 		}
-
+    r = (A*x -v);
 	}
   //	std::cout<<count<<std::endl<<std::flush;
 	return x;
@@ -823,7 +827,7 @@ Vector SD(Matrix& A, Vector& v, int& count){
 	Vector temp(m);
 	double alpha;
 	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
-	while ((A*x -v).norm() > tol){
+	while (r.norm() > tol){
 		top = r*r;
 		temp = A*r;
 		bottom = r*temp;
@@ -872,6 +876,10 @@ Vector CG(Matrix& A, Vector& v, int& count){
 		count+=1;
 		x = x + alpha*p;
 		r = v - A*x;
+    if (count>1000000){
+      count = -1;
+      return x;
+    }
 	}
   //	std::cout<<count<<std::endl<<std::flush;
 	return x;
@@ -911,7 +919,7 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
 	double anorm;
 	Vector temp2(m);
 	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
-	while ((A*x -v).norm() > tol){
+	while (r.norm() > tol){
     count+=1;
 		temp = A*r;
 		temp2 = A*p;
@@ -926,7 +934,11 @@ Vector CG_pre(Matrix& B, Vector& b, int& count){
 
 		x = x + alpha*p;
 		r = v - A*x;
-	}
+    if (count>100){
+      r = r*0;
+      count = -100000;
+    }
+  }
   //	std::cout<<count<<std::endl<<std::flush;
 	return x;
 }

@@ -14,7 +14,7 @@ int main()
 	ofstream outfile;
 	int i = 1;
 
-	for (int j=15; j<=50; j+=1){
+	for (int j=70; j<=80; j+=1){
 		/* format of output is
 		# format    0 kappa=size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time,
 		#           5 CG_pre count 6 CG_pre time
@@ -46,7 +46,7 @@ int main()
 		double sor05_co =0.0;
 		double sor05_ti =0.0;
     i = pow(1.09,j)+8;
-		outfile<<i<<",";
+
 
 
 
@@ -58,45 +58,52 @@ int main()
 			x= randv(x);
 			Matrix A(i,i);
 			A = randm(A);
-			Vector d(i);
-			for (int j=1; j<=i;  j++){
-				A.set_val(j,j,double(j));
+			for (int o=1; o<=i;  o++){
+				A.set_val(o,o,o+i);
 			}
 			Vector b = A*x;
-			Matrix AT = A.T();
-			Matrix AA = AT*A;
-			Vector b2 = AT*b;
+			Matrix AA = A;
 
 			clock_t end = clock();
 			double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 			cout<<"dim = "<<i<<" time for prep: "<<elapsed_secs<<endl;
-
 			// /////////////////////////////
 			int count = 0;
 	    //// code starts here /////////////////////////////////////
-			begin = clock();
-			count = 0;
-			Vector x1 = SD(A,b, count);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-      sd_ti += elapsed_secs;
-			sd_co += count;
+			Vector x1=b;
+			if (i<100){
+				begin = clock();
+				count = 0;
+				x1 = SD(A,b, count);
+				end = clock();
+				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	      sd_ti += elapsed_secs;
+				sd_co += count;
+				cout<<"SD"<<flush<<endl;
+			}
+			else{
+				sd_ti = 0;
+				sd_co = 0;
+			}
 
-			begin = clock();
-			count = 0;
-			x1 = CG(A,b, count);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			cg_ti += elapsed_secs;
-			cg_co += count;
+			// begin = clock();
+			// count = 0;
+			// x1 = CG(AA,b2, count);
+			// end = clock();
+			// elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			// cg_ti += elapsed_secs;
+			// cg_co += count;
 
-			begin = clock();
-			count = 0;
-			x1 = CG_pre(A,b, count);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			cgp_ti += elapsed_secs;
-			cgp_co += count;
+			// cout<<"CG"<<flush<<endl;
+      //
+			// begin = clock();
+			// count = 0;
+			// x1 = CG_pre(AA,b2, count);
+			// end = clock();
+			// elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			// cgp_ti += elapsed_secs;
+			// cgp_co += count;
+
 
 			////////////////// non-iterative solvers
 			begin = clock();
@@ -107,22 +114,25 @@ int main()
 			lu_ti += elapsed_secs;
 			lu_dx += delx;
 
-			if (i<200){
-				//cout<<"QR2"<<flush<<endl;
-			  begin = clock();
-				x1 = QRsolve2(A,b);
-				end = clock();
-				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-				delx = (x1 - x).norm();
-				qr_ti += elapsed_secs;
-				qr_dx += delx;
-			}
-			else{
-				qr_ti = 0;
-				qr_dx = 0;
-			}
-			//cout<<"QRs"<<flush<<endl;
-      if (i<100){
+			// if (i<100){
+			// 	//cout<<"QR2"<<flush<<endl;
+			// 	cout<<"QR2"<<flush<<endl;
+      //
+			//   begin = clock();
+			// 	x1 = QRsolve2(A,b);
+			// 	end = clock();
+			// 	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			// 	delx = (x1 - x).norm();
+			// 	qr_ti += elapsed_secs;
+			// 	qr_dx += delx;
+			// }
+			// else{
+			// 	qr_ti = 0;
+			// 	qr_dx = 0;
+			// }
+      //
+			cout<<"QR"<<flush<<endl;
+      if (i<200){
 				begin = clock();
 				x1 = QRsolve(A,b);
 				end = clock();
@@ -135,6 +145,9 @@ int main()
 				qre_ti = 0;
 				qre_dx = 0;
 			}
+			cout<<"Jac"<<flush<<endl;
+
+			count = 0;
 			begin = clock();
 			x1 = Jacobi(A,b,count);
 			end = clock();
@@ -142,40 +155,47 @@ int main()
 			jac_ti += elapsed_secs;
 			jac_co += count;
 
+			cout<<"SOR1"<<flush<<endl;
 
 			begin = clock();
-			x1 = SOR(A,b,1.0 , count);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			sor1_ti += elapsed_secs;
-			sor1_co += count;
+			if (i<140){
+				x1 = SOR(A,b,1.0 , count);
+				end = clock();
+				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				sor1_ti += elapsed_secs;
+				sor1_co += count;
+				cout<<"SOR15"<<flush<<endl;
 
-			begin = clock();
-			count = 0;
-			x1 = SOR(A,b,1.5 , count);
-	    end = clock();
-	    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			sor15_ti += elapsed_secs;
-			sor15_co += count;
-
-			begin = clock();
-			count = 0;
-			x1 = SOR(A,b,0.5 , count);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			sor05_ti += elapsed_secs;
-			sor05_co += count;
+				begin = clock();
+				count = 0;
+				x1 = SOR(A,b,1.5 , count);
+		    end = clock();
+		    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				sor15_ti += elapsed_secs;
+				sor15_co += count;
+			}
+			if (i<100){
+				cout<<"SOR5"<<flush<<endl;
+				begin = clock();
+				count = 0;
+				x1 = SOR(A,b,0.5 , count);
+				end = clock();
+				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+				sor05_ti += elapsed_secs;
+				sor05_co += count;
+		  }
 
 		}
 		//cout<<"done"<<flush<<endl;
 		outfile.open("SRDD.txt", fstream::app);
+		outfile<<i<<",";
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
 		outfile<< lu_ti/10<<","<< lu_dx/10 << ",";
 		outfile<< qr_ti/10<<","<< qr_dx/10 << ",";
 		outfile<< qre_ti/10<<","<< qre_dx/10<<",";
-		outfile<< jac_co/10<<","<< cg_ti/10 << ",";
+		outfile<< jac_co/10<<","<< jac_ti/10 << ",";
 		outfile<< sor1_co/10<<","<< sor1_ti/10 << ",";
 		outfile<< sor15_co/10<<","<< sor15_ti/10 << ",";
 		outfile<< sor05_co/10<<","<< sor05_ti/10;

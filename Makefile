@@ -1,9 +1,9 @@
 all: vary_N SRDD vary_kappa
 
 #For debugging
-OPT=-g -Wall
+#OPT=-g -Wall
 #For optimistaion
-#OPT=-O
+OPT=-O
 
 #All objects (except main) come from cpp and hpp
 %.o:	%.cpp %.hpp
