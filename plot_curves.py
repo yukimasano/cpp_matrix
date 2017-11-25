@@ -12,41 +12,80 @@ import matplotlib.pyplot as plt
 
 a=[]
 
-with open("Matrixclass/SRDD2.txt") as tsvfile:
+a=[]
+nn = "x"
+with open("%s.txt"%nn) as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
- # format    0 size , 1 JacCount, 2 JacTime, 3 SOR1Count, 4 SOR1Time
- #           5 SOR1.5Count, 6 SOR1.5 Time, 7 SOR05Count, 8 SOR05Time
- #           9 SD Count, 10 SD Time, 11 CG Count, 12 CG time, 
- #           13 LU time, 14 LU delx, 15 QR time, 16 QR delx           
+         # format    0 size=kappa , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time,
+		#           5 CG_pre count 6 CG_pre time
+		#           7 LU time, 8 LU delx, 9 QR time, 10 QR delx
+		#						11 full QR time 12 full QR delx
+		#						13 Jacobi count 14 Jacobi Time
+		#						15 SOR1 "-" 16
+		#						17 SOR1.5 "-" 18
+		#						19 SOR0.5 "-" 20  
+
 a=np.array(a,dtype=np.float)
+a[a==0]=np.NaN
 #a = a[:-2,:]       
-#%%
+
 fig = plt.figure()
-plt.loglog(a[:,0], a[:,2],'x-', label = 'Jacobi')
-plt.loglog(a[:,0], a[:,8],'x-', label = 'SOR 0.5')
-plt.loglog(a[:,0], a[:,10],'mx-', label = 'SD')
+plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
+plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
 
 
-plt.loglog(a[:,0], a[:,12],'yx-', label = 'CG')
-plt.loglog(a[:,0], a[:,13],'kx-', label = 'LU')
+plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
 
-plt.loglog(a[:,0], a[:,4],'gx-', label = 'SOR 1')
-plt.loglog(a[:,0], a[:,6],'x-', label = 'SOR 1.5')
+plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
+
+plt.loglog(a[:,0], a[:,2],'gx-', label = 'SD')
+
+plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
+
+plt.loglog(a[:,0], a[:,14],'x-', label = 'Jacobi')
+
+plt.loglog(a[:,0], a[:,16],'x-', label = 'GS')
+plt.loglog(a[:,0], a[:,18],'x-', label = 'SOR1.5')
+plt.loglog(a[:,0], a[:,20],'x-', label = 'SOR0.5')
 
 
-plt.loglog(a[:,0], a[:,15],'x-', label = 'QR')
 
-y = np.log(a[:,10]) 
+
+
+y = np.log(a[:,11]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)     
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+y = np.log(a[:,9]) 
 x= np.log(a[:,0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
 y100= np.exp(m*np.log(a[-1,0] )+b)
 
-plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
-y = np.log(a[:,12]) 
+               
+               
+y = np.log(a[:,7]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+
+
+
+y = np.log(a[:,4]) 
 x= np.log(a[:,0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
@@ -54,19 +93,9 @@ y100= np.exp(m*np.log(a[-1,0] )+b)
 
 plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='y',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
-               
 
-               
 
-y = np.log(a[:,13]) 
-x= np.log(a[:,0])
-m,b = np.polyfit(x, y, 1)
-y10= np.exp(m*np.log(a[0,0]) +b)
-y100= np.exp(m*np.log(a[-1,0] )+b)
-
-plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='k',linewidth=2,
-               markersize=10,label='Lin. fit m=%s'%round(m,2))
-y = np.log(a[:,4]) 
+y = np.log(a[:,2]) 
 x= np.log(a[:,0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
@@ -75,12 +104,23 @@ y100= np.exp(m*np.log(a[-1,0] )+b)
 plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
-plt.title(r'Time of solving for different sizes',fontsize=15)
+y = np.log(a[:,6]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plot1 = plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+
+plt.xlim(xmax=max(a[:,0]+10))
+plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
 plt.xlabel('Size N',fontsize=15)
-plt.xlim(xmax=max(a[:,0]))
 plt.ylabel('Time in seconds',fontsize=15)
-plt.legend(loc='best',ncol=2,fontsize=10)
-fig.savefig('Tex/figs/SRDD_time.png', dpi=500)
+#plt.legend(loc='best', ncol=2,fontsize=11)
+plt.gca().legend(loc='center left', ncol=2, bbox_to_anchor=(1, 0.5))
+fig.savefig('%s.pdf'%nn,bbox_inches='tight')
 
 
 #%%
@@ -122,53 +162,117 @@ fig3.savefig('Tex/figs/Tex/figs/SRDD_Accuracy.png', dpi=500)
 #%%
 
 a=[]
-
-with open("Matrixclass/difkappa.txt") as tsvfile:
+with open("same_size.txt") as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
- # format    0 kappa , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time, 
- #           5 LU time, 6 LU delx, 7 QR time, 8 QR delx           
+     # format    0 kappa , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time, 
+     #           5 CG_pre count 6 CG_pre time 
+     #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
+             
 a=np.array(a,dtype=np.float)
-y = np.log(a[:65,2]) 
-x= np.log(a[:65,0])
-    
-m,b = np.polyfit(x, y, 1)
-y10= np.exp(m*np.log(a[0,0]) +b)
-y100= np.exp(m*np.log(a[65,0] )+b)
-fig = plt.figure(2)
 
-plt.loglog(a[:65,0], a[:65,2],'x-', label = 'SD')
-plt.loglog(a[:65,0], a[:65,4],'x-', label = 'CG')
-plt.loglog(a[:65,0], a[:65,5],'x-', label = 'LU')
-plt.loglog(a[:65,0], a[:65,7],'x-', label = 'QR')
-plt.loglog([a[0,0], a[65,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=3,
+####
+plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
+plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
+
+
+plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
+
+plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
+
+plt.loglog(a[:,0], a[:,2],'gx-', label = 'SD')
+
+plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
+
+
+
+y = np.log(a[:,11]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)     
+y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
+
+plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
-plt.title(r'Time of solving for different $\kappa$ and $N=50$',fontsize=15)
+y = np.log(a[:,9]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,9]))),0] )+b)
+
+plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,9]))),0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+               
+               
+y = np.log(a[:,7]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+
+
+
+y = np.log(a[:,4]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='y',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+
+y = np.log(a[:,2]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+y = np.log(a[:,6]) 
+x= np.log(a[:,0])
+m,b = np.polyfit(x, y, 1)
+y10= np.exp(m*np.log(a[0,0]) +b)
+y100= np.exp(m*np.log(a[-1,0] )+b)
+
+plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
+               markersize=10,label='Lin. fit m=%s'%round(m,2))
+
+####
+
+
+plt.title(r'Time of solving for different $\kappa$ and $N=100$',fontsize=15)
 plt.ylabel('Time in s',fontsize=15)
 plt.xlabel(r'$\kappa$',fontsize=15)
 plt.legend(loc='best', ncol=2)
-fig.savefig('Tex/figs/Kappa_time.png', dpi=500)
+fig.savefig('Kappa_time.pdf')
 
-y = np.log(a[:65,6]) 
-x= np.log(a[:65,0])
-    
-m,b = np.polyfit(x, y, 1)
-y10= np.exp(m*np.log(a[0,0]) +b)
-y100= np.exp(m*np.log(a[65,0] )+b)
-
-fig3 = plt.figure()
-plt.loglog([a[0,0], a[65,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=3,
-               markersize=10,label='Lin. fit m=%s'%round(m,2))
-plt.loglog(a[:65,0], a[:65,6],'x-', label = 'LU')
-plt.loglog(a[:65,0], a[:65,8],'x-', label = 'QR')
-plt.xlim(xmax=max(a[:65,0]))
-plt.title(r'Accuracy for different $\kappa$',fontsize=15)
-plt.xlabel(r'$\kappa$', fontsize=15)
-plt.ylabel('Error',fontsize=15)
-plt.legend(loc='best', fontsize=15, ncol=2)
-fig3.savefig('Tex/figs/Kappa_Accuracy.png', dpi=500)
+#y = np.log(a[:65,6]) 
+#x= np.log(a[:65,0])
+#    
+#m,b = np.polyfit(x, y, 1)
+#y10= np.exp(m*np.log(a[0,0]) +b)
+#y100= np.exp(m*np.log(a[65,0] )+b)
+#
+#fig3 = plt.figure()
+#plt.loglog([a[0,0], a[65,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=3,
+#               markersize=10,label='Lin. fit m=%s'%round(m,2))
+#plt.loglog(a[:65,0], a[:65,6],'x-', label = 'LU')
+#plt.loglog(a[:65,0], a[:65,8],'x-', label = 'QR')
+#plt.xlim(xmax=max(a[:65,0]))
+#plt.title(r'Accuracy for different $\kappa$',fontsize=15)
+#plt.xlabel(r'$\kappa$', fontsize=15)
+#plt.ylabel('Error',fontsize=15)
+#plt.legend(loc='best', fontsize=15, ncol=2)
+#fig3.savefig('Tex/figs/Kappa_Accuracy.png', dpi=500)
 
 #%%
 import os
@@ -179,105 +283,102 @@ import matplotlib.pyplot as plt
 os.chdir('/Users/yuki/Dropbox/!Dphil/5_ES/cpp_matrix')
 
 
-for nn in ["k_2_normal","k_5_normal","k_2","k_10"]:
+for nn in ["k_2_normal","k_2","k_10"]:
     print "%s.txt"%nn
-    try:
-        a=[]
-        with open("%s.txt"%nn) as tsvfile:
-            tsvreader = csv.reader(tsvfile, delimiter=",")
-            for line in tsvreader:
-                a.append( line)
-         # format    0 size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time, 
-         #           5 CG_pre count 6 CG_pre time 
-         #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
-        
-        a=np.array(a,dtype=np.float)
-        a[a==0]=np.NaN
-        #a = a[:-2,:]       
-        
-        fig = plt.figure()
-        plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
-        plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
-        
-        
-        plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
-        
-        plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
-        
-        plt.loglog(a[:,0], a[:,2],'gx-', label = 'SD')
-        
-        plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
-        
-        
-        
-        y = np.log(a[:-(sum(np.isnan(a[:,11]))),11]) 
-        x= np.log(a[:-(sum(np.isnan(a[:,11]))),0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)     
-        y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
-        
-        plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-        
-        y = np.log(a[:-(sum(np.isnan(a[:,9]))),9]) 
-        x= np.log(a[:-(sum(np.isnan(a[:,9]))),0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)
-        y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,9]))),0] )+b)
-        
-        plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,9]))),0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-                       
-                       
-        y = np.log(a[:,7]) 
-        x= np.log(a[:,0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)
-        y100= np.exp(m*np.log(a[-1,0] )+b)
-        
-        plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-        
-        
-        
-        
-        y = np.log(a[:,4]) 
-        x= np.log(a[:,0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)
-        y100= np.exp(m*np.log(a[-1,0] )+b)
-        
-        plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='y',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-        
-        
-        y = np.log(a[:,2]) 
-        x= np.log(a[:,0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)
-        y100= np.exp(m*np.log(a[-1,0] )+b)
-        
-        plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-        
-        y = np.log(a[:,6]) 
-        x= np.log(a[:,0])
-        m,b = np.polyfit(x, y, 1)
-        y10= np.exp(m*np.log(a[0,0]) +b)
-        y100= np.exp(m*np.log(a[-1,0] )+b)
-        
-        plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
-                       markersize=10,label='Lin. fit m=%s'%round(m,2))
-        
-        
-        plt.xlim(xmax=max(a[:,0]+100))
-        plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
-        plt.xlabel('Size N',fontsize=15)
-        plt.ylabel('Time in seconds',fontsize=15)
-        plt.legend(loc='best', ncol=2,fontsize=11)
-        fig.savefig('%s.pdf'%nn)
-    except:
-        continue
+    a=[]
+    with open("%s.txt"%nn) as tsvfile:
+        tsvreader = csv.reader(tsvfile, delimiter=",")
+        for line in tsvreader:
+            a.append( line)
+     # format    0 size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time, 
+     #           5 CG_pre count 6 CG_pre time 
+     #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
+    
+    a=np.array(a,dtype=np.float)
+    a[a==0]=np.NaN
+    #a = a[:-2,:]       
+    
+    fig = plt.figure()
+    plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
+    plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
+    
+    
+    plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
+    
+    plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
+    
+    plt.loglog(a[:,0], a[:,2],'gx-', label = 'SD')
+    
+    plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
+    
+    
+    
+    y = np.log(a[:-(sum(np.isnan(a[:,11]))),11]) 
+    x= np.log(a[:-(sum(np.isnan(a[:,11]))),0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)     
+    y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
+    
+    plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+    
+    y = np.log(a[:-(sum(np.isnan(a[:,9]))),9]) 
+    x= np.log(a[:-(sum(np.isnan(a[:,9]))),0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)
+    y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,9]))),0] )+b)
+    
+    plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,9]))),0]],[y10,y100] ,'--', marker='.',color='c',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+                   
+                   
+    y = np.log(a[:,7]) 
+    x= np.log(a[:,0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)
+    y100= np.exp(m*np.log(a[-1,0] )+b)
+    
+    plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+    
+    
+    
+    
+    y = np.log(a[:,4]) 
+    x= np.log(a[:,0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)
+    y100= np.exp(m*np.log(a[-1,0] )+b)
+    
+    plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='y',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+    
+    
+    y = np.log(a[:,2]) 
+    x= np.log(a[:,0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)
+    y100= np.exp(m*np.log(a[-1,0] )+b)
+    
+    plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+    
+    y = np.log(a[:,6]) 
+    x= np.log(a[:,0])
+    m,b = np.polyfit(x, y, 1)
+    y10= np.exp(m*np.log(a[0,0]) +b)
+    y100= np.exp(m*np.log(a[-1,0] )+b)
+    
+    plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='b',linewidth=2,
+                   markersize=10,label='Lin. fit m=%s'%round(m,2))
+    
+    
+    plt.xlim(xmax=max(a[:,0]+100))
+    plt.title(r'Time of solving for different sizes, $\kappa =10$',fontsize=15)
+    plt.xlabel('Size N',fontsize=15)
+    plt.ylabel('Time in seconds',fontsize=15)
+    plt.legend(loc='best', ncol=2,fontsize=11)
+    fig.savefig('%s.pdf'%nn)
 #%%
 a=[]
 with open("same_kappa2_new.txt") as tsvfile:

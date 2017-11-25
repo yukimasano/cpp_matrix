@@ -1,4 +1,4 @@
-all: use_matrices
+all: vary_N SRDD vary_kappa
 
 #For debugging
 OPT=-g -Wall
@@ -9,8 +9,11 @@ OPT=-g -Wall
 %.o:	%.cpp %.hpp
 	g++ ${OPT} -c -o $@ $<
 #use_vectors relies on objects which rely on headers
-use_matrices:	use_matrices.cpp Matrix.o Vector.o Exception.o
-		g++ ${OPT} -o use_matrices use_matrices.cpp Matrix.o Vector.o Exception.o
-
+vary_N:	vary_N.cpp Matrix.o Vector.o Exception.o
+		g++ ${OPT} -o vary_N vary_N.cpp Matrix.o Vector.o Exception.o
+SRDD:	SRDD.cpp Matrix.o Vector.o Exception.o
+				g++ ${OPT} -o SRDD SRDD.cpp Matrix.o Vector.o Exception.o
+vary_kappa:	vary_kappa.cpp Matrix.o Vector.o Exception.o
+				g++ ${OPT} -o vary_kappa vary_kappa.cpp Matrix.o Vector.o Exception.o
 clean:
 	rm -f *.o *~ use_matrices
