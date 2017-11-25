@@ -169,7 +169,6 @@ int main()
 		}
 		//cout<<"done"<<flush<<endl;
 		outfile.open("SRDD.txt", fstream::app);
-		outfile<<i<<",";
 		outfile<< sd_co/10<<","<< sd_ti/10 << ",";
 		outfile<< cg_co/10<<","<< cg_ti/10 << ",";
 		outfile<< cgp_co/10<<","<< cgp_ti/10 << ",";
