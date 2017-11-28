@@ -51,11 +51,11 @@ In the above figure we use the normal system for the CG solvers.
 
 ## Same size `N`, varying condition number `κ`, symmetric A
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33230600-6e40a4a4-d1de-11e7-8589-9b668874fb42.png" height ="400"/></div>
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33317144-3e9e1d6a-d42e-11e7-88b5-489928ad4af2.png" height ="400"/></div>
 
 ## SRDD with condition number `κ=2` and varying size `N`
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33231638-b06f6d94-d1f0-11e7-9d71-5ef02a22e593.png" height ="400"/></div>
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33317145-3eb2686a-d42e-11e7-8250-93909068d341.png" height ="400"/></div>
 
 # Critical remarks
  * Definitely easier to implement in Matlab, Python.. there are definitely still some bugs in my code
