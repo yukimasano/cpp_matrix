@@ -82,7 +82,7 @@ fig.savefig('%s.png'%nn,bbox_inches='tight')
 #%%
 
 a=[]
-with open("same_size.txt") as tsvfile:
+with open("../output/same_size.txt") as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
         a.append( line)
@@ -91,9 +91,10 @@ with open("same_size.txt") as tsvfile:
      #           7 LU time, 8 LU delx, 9 QR time, 10 QR delx  11 full QR time 12 full QR delx       
              
 a=np.array(a,dtype=np.float)
+fig = plt.figure()
 
 ####
-plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
+#plt.loglog(a[:,0], a[:,11],'mx-', label = 'QR (expl. Q)')
 plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
 plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
 plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
@@ -102,14 +103,14 @@ plt.loglog(a[:,0], a[:,6],'bx-', label = 'CG-pre')
 
 
 # make some fits
-y = np.log(a[:,11]) 
-x= np.log(a[:,0])
-m,b = np.polyfit(x, y, 1)
-y10= np.exp(m*np.log(a[0,0]) +b)     
-y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
-
-plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
-               markersize=10,label='Lin. fit m=%s'%round(m,2))
+#y = np.log(a[:,11]) 
+#x= np.log(a[:,0])
+#m,b = np.polyfit(x, y, 1)
+#y10= np.exp(m*np.log(a[0,0]) +b)     
+#y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,11]))),0] )+b)
+#
+#plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,11]))),0]],[y10,y100] ,'--', marker='.',color='m',linewidth=2,
+#               markersize=10,label='Lin. fit m=%s'%round(m,2))
 
 y = np.log(a[:,9]) 
 x= np.log(a[:,0])
