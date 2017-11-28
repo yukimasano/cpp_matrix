@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 a=[]
 
 a=[]
-nn = "x"
+nn = "SRDD"
 with open("%s.txt"%nn) as tsvfile:
     tsvreader = csv.reader(tsvfile, delimiter=",")
     for line in tsvreader:
@@ -37,13 +37,13 @@ plt.loglog(a[:,0], a[:,9],'cx-', label = 'QR')
 
 
 #plt.loglog(a[:,0], a[:,4],'yx-', label = 'CG')
-plt.loglog(a[:-(sum(np.isnan(a[:,2]))),0], a[:-(sum(np.isnan(a[:,2]))),2],'x-', label = 'SD')
+plt.loglog(a[:,0], a[:,2],'x-', label = 'SD')
 
 plt.loglog(a[:,0], a[:,14],'gx-', label = 'Jacobi')
 
 
 
-plt.loglog(a[:,0], a[:,7],'rx-', label = 'LU')
+plt.loglog(a[:-(sum(np.isnan(a[:,7]))),0], a[:-(sum(np.isnan(a[:,7]))),7],'rx-', label = 'LU')
 
 
 plt.loglog(a[:,0], a[:,16],'x-', label = 'GS')
@@ -61,23 +61,23 @@ y100= np.exp(m*np.log(a[-1,0] )+b)
 plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='g',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
              
-y = np.log(a[:,7]) 
-x= np.log(a[:,0])
+y = np.log(a[:-(sum(np.isnan(a[:,7]))),7]) 
+x= np.log(a[:-(sum(np.isnan(a[:,7]))),0])
 m,b = np.polyfit(x, y, 1)
 y10= np.exp(m*np.log(a[0,0]) +b)
-y100= np.exp(m*np.log(a[-1,0] )+b)
+y100= np.exp(m*np.log(a[-(sum(np.isnan(a[:,7]))),0] )+b)
 
-plt.loglog([a[0,0], a[-1,0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
+plt.loglog([a[0,0], a[-(sum(np.isnan(a[:,7]))),0]],[y10,y100] ,'--', marker='.',color='r',linewidth=2,
                markersize=10,label='Lin. fit m=%s'%round(m,2))
 
 
-plt.xlim(xmax=max(a[:,0]+10))
+plt.xlim(xmax=max(a[:,0]+200))
 plt.title(r'Time of solving SRDD',fontsize=15)
 plt.xlabel('Size $N=0.5\kappa$',fontsize=15)
 plt.ylabel('Time in s',fontsize=15)
 #plt.legend(loc='best', ncol=2,fontsize=11)
 plt.gca().legend(ncol=2)#(loc='center left', ncol=2, bbox_to_anchor=(1, 0.5))
-fig.savefig('%s.pdf'%nn,bbox_inches='tight')
+fig.savefig('%s.png'%nn,bbox_inches='tight')
 
 #%%
 

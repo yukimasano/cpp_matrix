@@ -14,7 +14,7 @@ int main()
 	ofstream outfile;
 	int i = 1;
 
-	for (int j=70; j<=80; j+=1){
+	for (int j=91; j<=110; j+=3){
 		/* format of output is
 		# format    0 kappa=size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time,
 		#           5 CG_pre count 6 CG_pre time
@@ -71,7 +71,7 @@ int main()
 			int count = 0;
 	    //// code starts here /////////////////////////////////////
 			Vector x1=b;
-			if (i<100){
+
 				begin = clock();
 				count = 0;
 				x1 = SD(A,b, count);
@@ -80,11 +80,11 @@ int main()
 	      sd_ti += elapsed_secs;
 				sd_co += count;
 				cout<<"SD"<<flush<<endl;
-			}
-			else{
-				sd_ti = 0;
-				sd_co = 0;
-			}
+
+			// else{
+			// 	sd_ti = 0;
+			// 	sd_co = 0;
+			// }
 
 			// begin = clock();
 			// count = 0;
@@ -106,15 +106,16 @@ int main()
 
 
 			////////////////// non-iterative solvers
-			begin = clock();
-			x1 = LUsolve(A,b);
-			end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			double delx = (x1 - x).norm();
-			lu_ti += elapsed_secs;
-			lu_dx += delx;
 
-			// if (i<100){
+			// begin = clock();
+			// x1 = LUsolve(A,b);
+			// end = clock();
+			// elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			// double delx = (x1 - x).norm();
+			// lu_ti += elapsed_secs;
+			// lu_dx += delx;
+      //
+			// if (i<150){
 			// 	//cout<<"QR2"<<flush<<endl;
 			// 	cout<<"QR2"<<flush<<endl;
       //
@@ -131,20 +132,20 @@ int main()
 			// 	qr_dx = 0;
 			// }
       //
-			cout<<"QR"<<flush<<endl;
-      if (i<200){
-				begin = clock();
-				x1 = QRsolve(A,b);
-				end = clock();
-				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-				delx = (x1 - x).norm();
-				qre_ti += elapsed_secs;
-				qre_dx += delx;
-			}
-			else{
-				qre_ti = 0;
-				qre_dx = 0;
-			}
+			// cout<<"QR"<<flush<<endl;
+      // if (i<200){
+			// 	begin = clock();
+			// 	x1 = QRsolve(A,b);
+			// 	end = clock();
+			// 	elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			// 	delx = (x1 - x).norm();
+			// 	qre_ti += elapsed_secs;
+			// 	qre_dx += delx;
+			// }
+			// else{
+			// 	qre_ti = 0;
+			// 	qre_dx = 0;
+			// }
 			cout<<"Jac"<<flush<<endl;
 
 			count = 0;

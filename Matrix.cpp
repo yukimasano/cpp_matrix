@@ -676,7 +676,7 @@ Vector Jacobi(Matrix& A, Vector& v, int& count){
 	Matrix eye = diag(temp);
   Vector c = T*v;
 	T =  (eye - T);
-	double tol = 1.e-12;
+	double tol = 1.e-14*v.norm();
 	Vector x=c;
 	//std::cout<<" before the while loop "<<(A*x -c).norm() << std::endl<<std::flush;
   Vector r = (A*x -v);
@@ -723,7 +723,7 @@ Vector SOR(Matrix& A, Vector& v, double w, int& count){
 	Matrix M = diag(temp);
 	M= M*(1.-w) -  w*Ubar;
 	Vector c =  (D*v) *w;
-	double tol = 1.e-12;
+	double tol = 1.e-14*v.norm();
 	Vector x=c;
 	Vector rh(m);
   Vector r = c;
@@ -819,7 +819,7 @@ Vector SD(Matrix& A, Vector& v, int& count){
 
 	// INITIALISATION
 	Vector x= v;
-	double tol = 1.e-12;
+	double tol = 1.e-14*v.norm();
 	double top;
 	Vector r = A*x;
 	r= r-v;
@@ -833,7 +833,7 @@ Vector SD(Matrix& A, Vector& v, int& count){
 		bottom = r*temp;
 		alpha= top/bottom;
 		count+=1;
-		x = x + alpha*r;
+		x = x + top*r/bottom;
 		r = v - A*x;
 	}
    //	std::cout<<count<<std::endl<<std::flush;
@@ -848,7 +848,7 @@ Vector CG(Matrix& A, Vector& v, int& count){
 
 	// INITIALISATION
   Vector x= v;
-	double tol = 1.e-12;
+	double tol = 1.e-14*v.norm();
 	Vector r = v - A*x;
 	Vector p = r;
 	Vector temp(m);
