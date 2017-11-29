@@ -14,7 +14,7 @@ int main()
 	ofstream outfile;
 	int i = 1;
 
-	for (int j=91; j<=110; j+=3){
+	for (int j=16; j<=110; j+=1){
 		/* format of output is
 		# format    0 kappa=size , 1 SD Count, 2 SD Time, 3 CG Count, 4 CG time,
 		#           5 CG_pre count 6 CG_pre time
@@ -70,16 +70,15 @@ int main()
 			// /////////////////////////////
 			int count = 0;
 	    //// code starts here /////////////////////////////////////
-			Vector x1=b;
-
-				begin = clock();
-				count = 0;
-				x1 = SD(A,b, count);
-				end = clock();
-				elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	      sd_ti += elapsed_secs;
-				sd_co += count;
-				cout<<"SD"<<flush<<endl;
+			Vector x1(i);
+			begin = clock();
+			count = 0;
+			x1 = SD(A,b, count);
+			end = clock();
+			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+      sd_ti += elapsed_secs;
+			sd_co += count;
+			cout<<"SD"<<flush<<endl;
 
 			// else{
 			// 	sd_ti = 0;
@@ -107,13 +106,13 @@ int main()
 
 			////////////////// non-iterative solvers
 
-			// begin = clock();
-			// x1 = LUsolve(A,b);
-			// end = clock();
-			// elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-			// double delx = (x1 - x).norm();
-			// lu_ti += elapsed_secs;
-			// lu_dx += delx;
+			begin = clock();
+			x1 = LUsolve(A,b);
+			end = clock();
+			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+			double delx = (x1 - x).norm();
+			lu_ti += elapsed_secs;
+			lu_dx += delx;
       //
 			// if (i<150){
 			// 	//cout<<"QR2"<<flush<<endl;
