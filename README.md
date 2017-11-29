@@ -55,7 +55,7 @@ In the above figure we use the normal system for the CG solvers.
 
 ## SRDD with condition number `κ=2` and varying size `N`
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33317145-3eb2686a-d42e-11e7-8250-93909068d341.png" height ="400"/></div>
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33377098-180a305a-d508-11e7-912c-e8b17e86084a.png" height ="400"/></div>
 
 # Critical remarks
  * Definitely easier to implement in Matlab, Python.. there are definitely still some bugs in my code
