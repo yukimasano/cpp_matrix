@@ -7,7 +7,7 @@ OPT=-O
 
 #All objects (except main) come from cpp and hpp
 %.o:	%.cpp %.hpp
-	g++ ${OPT} -c -o $@ $<
+	g++ ${OPT} -c -std=c++11 -o $@ $<
 #use_vectors relies on objects which rely on headers
 vary_N:	vary_N.cpp Matrix.o Vector.o Exception.o
 		g++ ${OPT} -o vary_N vary_N.cpp Matrix.o Vector.o Exception.o
