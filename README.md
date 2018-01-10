@@ -55,7 +55,14 @@ In the above figure we use the normal system for the CG solvers.
 
 ## SRDD with condition number `κ=2` and varying size `N`
 
-<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33317145-3eb2686a-d42e-11e7-8250-93909068d341.png" height ="400"/></div>
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/29401818/33377648-28631e4c-d50a-11e7-84ee-302560607ce4.png" height ="400"/></div>
+
+# Some results
+* symmetric matrices with low condition number are easiest to solve
+* iterative methods can outperform decomposition methods even for modest problem sizes
+* the algorithms scale very differently, though consistently faster then their theoretical prediction
+* pre-conditioning improves convergences of the CG algorithm
+* which algorithm is the fastest depends crucially on the problem size and the condition number, though CG-pre and LU among the fastest implemented here
 
 # Critical remarks
  * Definitely easier to implement in Matlab, Python.. there are definitely still some bugs in my code
